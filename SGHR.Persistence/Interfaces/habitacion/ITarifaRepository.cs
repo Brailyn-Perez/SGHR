@@ -1,7 +1,10 @@
 ﻿
+using SGHR.Domain.Entities.habitacion;
+using SGHR.Domain.Repository;
+
 namespace SGHR.Persistence.Interfaces.habitacion
 {
-    internal interface ITarifaRepository
+    public interface ITarifaRepository : IBaseRepository<Tarifa>
     {
     }
 }

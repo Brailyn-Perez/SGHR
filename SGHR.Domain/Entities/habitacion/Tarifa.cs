@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace SGHR.Domain.Entities.habitacion
 {
     [Table("Tarifas", Schema = "habitacion")]
-    public class Tarifas
+    public class Tarifa
     {
         [Key]
         public int IdTarifa { get; set; }
