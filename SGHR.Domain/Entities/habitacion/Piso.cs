@@ -1,11 +1,12 @@
 ﻿
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using SGHR.Domain.Base;
 
 namespace SGHR.Domain.Entities.habitacion
 {
     [Table("Piso", Schema = "habitacion")]
-    public class Piso
+    public class Piso : AuditoryEntity
     {
         [Key]
         public int IdPiso { get; set; }
