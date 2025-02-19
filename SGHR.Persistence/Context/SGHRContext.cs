@@ -18,7 +18,7 @@ namespace SGHR.Persistence.Context
         public DbSet<EstadoHabitacion> EstadoHabitaciones { get; set; }
         public DbSet<Habitacion> Habitaciones { get; set; }
         public DbSet<Piso> Pisos { get; set; }
-        public DbSet<Tarifas> Tarifas { get; set; }
+        public DbSet<Tarifa> Tarifas { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<RolUsuario> RolUsuarios { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
@@ -60,7 +60,7 @@ namespace SGHR.Persistence.Context
                 .WithMany()
                 .HasForeignKey(r => r.IdHabitacion);
 
-            modelBuilder.Entity<Tarifas>()
+            modelBuilder.Entity<Tarifa>()
                 .HasOne(t => t.Habitacion)
                 .WithMany()
                 .HasForeignKey(t => t.IdHabitacion);
@@ -79,7 +79,7 @@ namespace SGHR.Persistence.Context
                 .Property(c => c.FechaCreacion)
                 .HasDefaultValueSql("getdate()");
 
-            modelBuilder.Entity<Tarifas>()
+            modelBuilder.Entity<Tarifa>()
                 .Property(t => t.Estado)
                 .HasDefaultValue(true);
 
