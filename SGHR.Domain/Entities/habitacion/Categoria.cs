@@ -2,11 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using SGHR.Domain.Entities.servicio;
+using SGHR.Domain.Base;
 
 namespace SGHR.Domain.Entities.habitacion
 {
     [Table("Categoria", Schema = "habitacion")]
-    public class Categoria
+    public class Categoria : AuditoryEntity
     {
         [Key]
         public int IdCategoria { get; set; }

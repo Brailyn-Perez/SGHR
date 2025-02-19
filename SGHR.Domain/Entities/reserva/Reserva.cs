@@ -3,11 +3,12 @@ using SGHR.Domain.Entities.habitacion;
 using SGHR.Domain.Entities.usuario;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using SGHR.Domain.Base;
 
 namespace SGHR.Domain.Entities.reserva
 {
     [Table("Reserva", Schema = "reserva")]
-    public class Reserva
+    public class Reserva : AuditoryEntity
     {
         [Key]
         public int IdReserva { get; set; }
