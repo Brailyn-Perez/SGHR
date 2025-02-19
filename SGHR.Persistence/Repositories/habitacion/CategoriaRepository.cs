@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Domain.Base;
@@ -23,12 +24,13 @@ namespace SGHR.Persistence.Repositories.habitacion
             _configuration = configuration;
         }
 
-        public Task<OperationResult> GetAllCategoriasDisponibles()
+        public async Task<OperationResult> GetAllCategoriasDisponibles()
         {
             OperationResult result = new OperationResult();
             try
             {
-
+                var query = await _context.Categorias.AllAsync(x => x.Estado == true);
+                result.Data = query;
             }
             catch (Exception ex)
             {
@@ -36,15 +38,16 @@ namespace SGHR.Persistence.Repositories.habitacion
                 result.Success = false;
                 _logger.LogError(result.Message, ex.ToString());
             }
-            throw new NotImplementedException();
+            return result;
         }
 
-        public Task<OperationResult> GetCategoriaByServicios(Servicios servicios)
+        public async Task<OperationResult> GetCategoriaByServicios(Servicios servicios)
         {
             OperationResult result = new OperationResult();
             try
             {
-
+                var query = await _context.Categorias.AllAsync(x => x.Servicios == servicios);
+                result.Data = query;
             }
             catch (Exception ex)
             {
@@ -52,7 +55,9 @@ namespace SGHR.Persistence.Repositories.habitacion
                 result.Success = false;
                 _logger.LogError(result.Message, ex.ToString());
             }
-            throw new NotImplementedException();
+
+            return result;
         }
+
     }
 }
