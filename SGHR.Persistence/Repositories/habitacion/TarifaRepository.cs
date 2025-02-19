@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SGHR.Domain.Base;
 using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
@@ -19,6 +20,22 @@ namespace SGHR.Persistence.Repositories.habitacion
             _context = context;
             _logger = logger;
             _configuration = configuration;
+        }
+
+        public Task<OperationResult> DefinirPrecioBase(decimal precioBase)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorTarifaRepository:DefinirPrecioBase"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            throw new NotImplementedException();
         }
     }
 }
