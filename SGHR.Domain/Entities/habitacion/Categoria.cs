@@ -25,3 +25,4 @@ namespace SGHR.Domain.Entities.habitacion
         public Servicios Servicios { get; set; }
 
     }
+}
