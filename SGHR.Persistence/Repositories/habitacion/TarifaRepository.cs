@@ -22,20 +22,5 @@ namespace SGHR.Persistence.Repositories.habitacion
             _configuration = configuration;
         }
 
-        public Task<OperationResult> DefinirPrecioBase(decimal precioBase)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                result.Message = _configuration["ErrorTarifaRepository:DefinirPrecioBase"];
-                result.Success = false;
-                _logger.LogError(result.Message, ex.ToString());
-            }
-            throw new NotImplementedException();
-        }
     }
 }
