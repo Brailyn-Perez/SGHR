@@ -1,7 +1,10 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SGHR.Domain.Base;
 using SGHR.Domain.Entities.usuario;
+using SGHR.Model.Model.usuario;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
@@ -21,5 +24,39 @@ namespace SGHR.Persistence.Repositories.usuario
             _logger = logger;
             _configuration = configuration;
         }
+
+        public async Task<OperationResult> GetRolUsuarioByUsuario(Usuario usuario)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                var Query = await (from u in _context.Usuarios
+                                   join r in _context.RolUsuarios on u.IdRolUsuario equals r.IdRolUsuario
+                                   where r.IdRolUsuario == usuario.IdUsuario
+                                   select new RolUsuarioUsuarioModel()
+                                   {
+                                       IdUsuario = u.IdUsuario,
+                                       IdRolUsuario = r.IdRolUsuario,
+                                       NombreCompleto = u.NombreCompleto,
+                                       Clave = u.Clave,
+                                       Descripcion = r.Descripcion,
+                                       Estado = r.Estado,
+                                       FechaCreacion = r.FechaCreacion,
+
+                                   }).ToListAsync();
+                result.Data = Query;
+            }
+            catch (Exception ex) 
+            {
+                result.Message = this._configuration["ErrorRolUsuarioRepository:GetRolUsuarioByUsuario"];
+                result.Success = false;
+                this._logger.LogError(result.Message, ex.ToString());
+            }
+
+            return result;
+        }
     }
+
+
 }
