@@ -1,4 +1,5 @@
 ﻿
+using SGHR.Domain.Base;
 using SGHR.Domain.Entities.habitacion;
 using SGHR.Domain.Repository;
 

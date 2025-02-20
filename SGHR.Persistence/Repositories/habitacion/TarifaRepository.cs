@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SGHR.Domain.Base;
 using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
@@ -20,5 +21,6 @@ namespace SGHR.Persistence.Repositories.habitacion
             _logger = logger;
             _configuration = configuration;
         }
+
     }
 }
