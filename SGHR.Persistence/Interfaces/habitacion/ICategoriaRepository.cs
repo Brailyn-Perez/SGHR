@@ -10,5 +10,6 @@ namespace SGHR.Persistence.Interfaces.habitacion
     {
         public Task<OperationResult> GetCategoriaByServicios(Servicios servicios);
         public Task<OperationResult> GetAllCategoriasDisponibles();
+        public Task<OperationResult> DeleteCategoria(int id);
     }
 }
