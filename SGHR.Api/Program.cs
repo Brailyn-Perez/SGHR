@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using SGHR.Api.DependencyInjection;
+using SGHR.Persistence.Context;
+
 namespace SGHR.Api
 {
     public class Program
@@ -13,6 +17,12 @@ namespace SGHR.Api
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<SGHRContext>(options => 
+            options.UseSqlServer(builder.Configuration.GetConnectionString("BrailynConnection")));
+
+            // aqui es donde se inyectan todas las dependencias necesarias
+            builder.Services.AddAplicationServices();
 
             var app = builder.Build();
 
