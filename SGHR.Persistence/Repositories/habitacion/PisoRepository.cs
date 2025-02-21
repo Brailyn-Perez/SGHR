@@ -49,10 +49,10 @@ namespace SGHR.Persistence.Repositories.habitacion
                 else
                 {
                     var Habitacion = await _context.Habitaciones.FirstAsync(x => x.IdPiso == Piso.IdPiso);
-                    var tieneReserva =  _context.Reservas.Any(x => x.IdHabitacion == Habitacion.IdHabitacion);
-                    if (tieneReserva)
+                    var tieneReserva =  await _context.Reservas.FirstAsync(x => x.IdHabitacion == Habitacion.IdHabitacion);
+                    if (tieneReserva.Estado == true)
                     {
-                        result.Message = "Este piso tiene reservas a su nombre, no se puede borrar";
+                        result.Message = "Este piso tiene reservas activas a su nombre, no se puede borrar";
                         result.Success = false;
                         return result;
                     }
