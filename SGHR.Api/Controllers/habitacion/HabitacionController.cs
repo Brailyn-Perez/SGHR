@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Persistence.Interfaces.habitacion;
 
 namespace SGHR.Api.Controllers.habitacion
 {
@@ -6,7 +7,13 @@ namespace SGHR.Api.Controllers.habitacion
     [ApiController]
     public class HabitacionController : ControllerBase
     {
-        
+        private readonly IHabitacionRepository _repository;
+
+        public HabitacionController(IHabitacionRepository repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {
