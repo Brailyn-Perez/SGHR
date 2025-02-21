@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Persistence.Interfaces.usuario;
 
 
 namespace SGHR.Api.Controllers.usuario
@@ -7,6 +8,13 @@ namespace SGHR.Api.Controllers.usuario
     [ApiController]
     public class RolUsuarioController : ControllerBase
     {
+        private readonly IRolUsuarioRepository _repository;
+
+        public RolUsuarioController(IRolUsuarioRepository repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {

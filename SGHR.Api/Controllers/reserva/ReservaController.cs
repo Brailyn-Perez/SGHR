@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Persistence.Interfaces.reserva;
 
 
 namespace SGHR.Api.Controllers.reserva
@@ -7,6 +8,13 @@ namespace SGHR.Api.Controllers.reserva
     [ApiController]
     public class ReservaController : ControllerBase
     {
+        private readonly IReservaRepository _repository;
+
+        public ReservaController(IReservaRepository repository)
+        {
+            _repository = repository;
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {

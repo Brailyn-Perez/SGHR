@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Persistence.Interfaces.servicio;
 
 
 namespace SGHR.Api.Controllers.servicio
@@ -7,6 +8,12 @@ namespace SGHR.Api.Controllers.servicio
     [ApiController]
     public class ServicioController : ControllerBase
     {
+        private readonly IServicioRepository _repository;
+
+        public ServicioController(IServicioRepository repository)
+        {
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {
