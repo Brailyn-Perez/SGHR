@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Entities.usuario;
 using SGHR.Persistence.Interfaces.usuario;
 
 
@@ -15,31 +16,36 @@ namespace SGHR.Api.Controllers.usuario
             _repository = repository;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetRolUsuario")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var RolUsuario = await _repository.GetAllAsync();
+            return Ok(RolUsuario);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetRolUsuarioById")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var RolUsuario = await _repository.GetEntityByIdAsync(id);
+            if (RolUsuario == null) 
+            {
+                return NotFound();
+            }
+            return Ok(RolUsuario);
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveRolUsuario")]
+        public async Task<IActionResult> Post([FromBody] RolUsuario rolUsuario)
         {
+            var RolUsuario = await _repository.SaveEntityAsync(rolUsuario);
+            return Ok(RolUsuario);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateRolUsuario")]
+        public async Task<IActionResult> Put([FromBody] RolUsuario rolUsuario)
         {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var RolUsuario = await _repository.UpdateEntityAsync(rolUsuario);
+            return Ok(RolUsuario);
         }
     }
 }

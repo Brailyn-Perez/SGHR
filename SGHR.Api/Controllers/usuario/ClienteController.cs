@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Base;
+using SGHR.Domain.Entities.usuario;
 using SGHR.Persistence.Interfaces.usuario;
 
 
@@ -15,31 +17,36 @@ namespace SGHR.Api.Controllers.usuario
             _repository = repository;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetCliente")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var Cliente = await _repository.GetAllAsync();
+            return Ok(Cliente);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetClienteById")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var Cliente = await _repository.GetEntityByIdAsync(id);
+            if (Cliente == null) 
+            {
+                return NotFound();
+            }
+            return Ok(Cliente);
+        }
+        
+        [HttpPost("SaveCliente")]
+        public async Task<IActionResult> Post([FromBody] Cliente Cliente)
+        {
+            var cliente = await _repository.SaveEntityAsync(Cliente);
+            return Ok(cliente);
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPut("UpdateCliente")]
+        public async Task<IActionResult> Put([FromBody] Cliente Cliente)
         {
-        }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var cliente = await _repository.UpdateEntityAsync(Cliente);
+            return Ok(Cliente);
         }
     }
 }

@@ -6,6 +6,7 @@ using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
 using SGHR.Persistence.Repositories.habitacion;
+using System.Runtime.CompilerServices;
 
 namespace SGHR.Persistence.Repositories.usuario
 {
