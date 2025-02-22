@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Entities.usuario;
 using SGHR.Persistence.Interfaces.usuario;
 
 
@@ -15,31 +16,36 @@ namespace SGHR.Api.Controllers.usuario
             _repository = repository;
         }
 
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetUsuario")]
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+           var Usuario = await _repository.GetAllAsync();
+            return Ok(Usuario);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetUsuarioById")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var Usuario = await _repository.GetEntityByIdAsync(id);
+            if (Usuario == null) 
+            {
+                return NotFound();
+            }
+            return Ok(Usuario);
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("SaveUsuario")]
+        public async Task<IActionResult> Post([FromBody] Usuario usuario)
         {
+            var Usuario = await _repository.SaveEntityAsync(usuario);
+            return Ok(Usuario);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut("UpdateUsuario")]
+        public async Task<IActionResult> Put([FromBody] Usuario usuario)
         {
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var Usuario = await _repository.UpdateEntityAsync(usuario);
+            return Ok(Usuario);
         }
     }
 }
