@@ -8,8 +8,6 @@ namespace SGHR.Persistence.Interfaces.habitacion
 {
     public interface ICategoriaRepository : IBaseRepository<Categoria>
     {
-        public Task<OperationResult> GetCategoriaByServicios(Servicios servicios);
-        public Task<OperationResult> GetAllCategoriasDisponibles();
         public Task<OperationResult> DeleteCategoria(int id);
     }
 }

@@ -1,10 +1,7 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Domain.Base;
 using SGHR.Domain.Entities.habitacion;
-using SGHR.Domain.Entities.servicio;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.habitacion;
@@ -17,44 +14,78 @@ namespace SGHR.Persistence.Repositories.habitacion
         private readonly ILogger<CategoriaRepository> _logger;
         private readonly IConfiguration _configuration;
 
-        public CategoriaRepository(SGHRContext context , ILogger<CategoriaRepository> logger, IConfiguration configuration) : base(context)
+        public CategoriaRepository(SGHRContext context, ILogger<CategoriaRepository> logger, IConfiguration configuration) : base(context)
         {
             _context = context;
             _logger = logger;
             _configuration = configuration;
         }
 
+        public override async Task<OperationResult> SaveEntityAsync(Categoria entity)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                if (await ExistsAsync(x => x.IdCategoria == entity.IdCategoria))
+                {
+                    result.Message = "La categoría ya existe.";
+                    result.Success = false;
+                }
+                else
+                {
+                    result = await base.SaveEntityAsync(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorCategoriaRepository:SaveEntityAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+
+        public override async Task<List<Categoria>> GetAllAsync()
+        {
+            return await base.GetAllAsync();
+        }
+
+        public override async Task<Categoria> GetEntityByIdAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ArgumentException("El ID debe ser un número positivo.", nameof(id));
+            }
+
+            var categoria = await base.GetEntityByIdAsync(id);
+
+            if (categoria == null)
+            {
+                throw new KeyNotFoundException("La categoría con el ID especificado no existe.");
+            }
+
+            return categoria;
+        }
+
         public async Task<OperationResult> DeleteCategoria(int id)
         {
             OperationResult result = new OperationResult();
-
             try
             {
                 var categoria = await _context.Categorias.FindAsync(id);
-
                 if (categoria == null)
                 {
-                    result.Message = "La Categoria no existe";
+                    result.Message = "La categoría no existe.";
                     result.Success = false;
-                    return result;
-                }
-
-                var existeHabitacion = _context.Habitaciones.Any(x => x.IdCategoria == id);
-
-                if (existeHabitacion)
-                {
-                    result.Message = "No se puede borrar una categoria con una habitacion asignada";
-                    result.Success = false;
-                    return result;
                 }
                 else
                 {
                     categoria.Borrado = true;
                     _context.Categorias.Update(categoria);
+                    await _context.SaveChangesAsync();
 
-                    result.Message = "Categoria eliminada con exito";
+                    result.Message = "Categoría eliminada con éxito.";
                     result.Success = true;
-
                 }
             }
             catch (Exception ex)
@@ -63,42 +94,6 @@ namespace SGHR.Persistence.Repositories.habitacion
                 result.Success = false;
                 _logger.LogError(result.Message, ex.ToString());
             }
-
-            return result;
-        }
-
-        public async Task<OperationResult> GetAllCategoriasDisponibles()
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var query = await _context.Categorias.AllAsync(x => x.Estado == true);
-                result.Data = query;
-            }
-            catch (Exception ex)
-            {
-                result.Message = _configuration["ErrorCategoriaRepository:GetAllCategoriasDisponibles"];
-                result.Success = false;
-                _logger.LogError(result.Message, ex.ToString());
-            }
-            return result;
-        }
-
-        public async Task<OperationResult> GetCategoriaByServicios(Servicios servicios)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var query = await _context.Categorias.AllAsync(x => x.Servicios == servicios);
-                result.Data = query;
-            }
-            catch (Exception ex)
-            {
-                result.Message = _configuration["ErrorCategoriaRepository:GetCategoriaByServicios"];
-                result.Success = false;
-                _logger.LogError(result.Message, ex.ToString());
-            }
-
             return result;
         }
 
@@ -107,28 +102,24 @@ namespace SGHR.Persistence.Repositories.habitacion
             OperationResult result = new OperationResult();
             try
             {
-              var ExisteCategoria = await  base.ExistsAsync(x => x.IdCategoria == entity.IdCategoria);
-                if(ExisteCategoria)
+                var existeCategoria = await ExistsAsync(x => x.IdCategoria == entity.IdCategoria);
+                if (existeCategoria)
                 {
-                    await base.UpdateEntityAsync(entity);
+                    result = await base.UpdateEntityAsync(entity);
                 }
                 else
                 {
-                    result.Message = "La categoria a editar no existe";
+                    result.Message = "La categoría a editar no existe.";
                     result.Success = false;
                 }
-
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 result.Message = _configuration["ErrorCategoriaRepository:UpdateEntityAsync"];
-                result.Success=false;
-                _logger.LogError(result.Message , ex.ToString());
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
             }
-
             return result;
         }
-
-
-
     }
 }
