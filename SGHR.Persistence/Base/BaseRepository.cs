@@ -31,6 +31,7 @@ namespace SGHR.Persistence.Base
                 Entity.Update(entity);
                 await _Context.SaveChangesAsync();
                 Result.Success = true;
+                Result.Message = "categoria actualizada";
 
             }
             catch (Exception ex)
@@ -70,8 +71,9 @@ namespace SGHR.Persistence.Base
         {
             try
             {
-                await Entity.Where(filter).ToListAsync();
+                var result = await Entity.Where(filter).ToListAsync();
                 Result.Success = true;
+                Result.Data = result;
 
             }
             catch (Exception ex)

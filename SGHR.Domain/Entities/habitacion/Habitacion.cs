@@ -35,13 +35,5 @@ namespace SGHR.Domain.Entities.habitacion
         public bool? Estado { get; set; } = true;
 
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
-
-        public EstadoHabitacion EstadoHabitacion { get; set; }
-        public Piso Piso { get; set; }
-
-        public Categoria Categoria
-        {
-            get; set;
-        }
     }
 }

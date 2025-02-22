@@ -23,7 +23,5 @@ namespace SGHR.Domain.Entities.habitacion
 
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
-        public Servicios Servicios { get; set; }
-
     }
 }

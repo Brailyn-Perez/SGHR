@@ -29,13 +29,7 @@ namespace SGHR.Persistence.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            // Relaciones
-            modelBuilder.Entity<Categoria>()
-                .HasOne(c => c.Servicios)
-                .WithMany()
-                .HasForeignKey(c => c.IdServicio);
-
-            modelBuilder.Entity<Habitacion>()
+/*            modelBuilder.Entity<Habitacion>()
                 .HasOne(h => h.EstadoHabitacion)
                 .WithMany()
                 .HasForeignKey(h => h.IdEstadoHabitacion);
@@ -49,6 +43,7 @@ namespace SGHR.Persistence.Context
                 .HasOne(h => h.Categoria)
                 .WithMany()
                 .HasForeignKey(h => h.IdCategoria);
+*/
 
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.Cliente)

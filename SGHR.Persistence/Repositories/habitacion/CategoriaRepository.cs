@@ -5,6 +5,7 @@ using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.habitacion;
+using System.Linq.Expressions;
 
 namespace SGHR.Persistence.Repositories.habitacion
 {
@@ -48,6 +49,11 @@ namespace SGHR.Persistence.Repositories.habitacion
         public override async Task<List<Categoria>> GetAllAsync()
         {
             return await base.GetAllAsync();
+        }
+
+        public override Task<OperationResult> GetAllAsync(Expression<Func<Categoria, bool>> filter)
+        {
+            return base.GetAllAsync(filter);
         }
 
         public override async Task<Categoria> GetEntityByIdAsync(int id)
@@ -106,6 +112,8 @@ namespace SGHR.Persistence.Repositories.habitacion
                 if (existeCategoria)
                 {
                     result = await base.UpdateEntityAsync(entity);
+                    result.Message = "categoria editada";
+                    result.Success = true;
                 }
                 else
                 {
