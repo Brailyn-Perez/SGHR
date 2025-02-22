@@ -8,6 +8,7 @@ using SGHR.Model.Model.usuario;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
+using System.Runtime.CompilerServices;
 
 
 namespace SGHR.Persistence.Repositories.usuario
@@ -63,6 +64,11 @@ namespace SGHR.Persistence.Repositories.usuario
             }
 
             return result;
+        }
+
+        public async override Task<List<Cliente>> GetAllAsync() 
+        {
+            return await _context.Clientes.Where(cd => cd.Borrado == false).ToListAsync();
         }
     }
 }
