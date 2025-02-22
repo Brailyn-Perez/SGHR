@@ -15,7 +15,7 @@ namespace SGHR.Api.Controllers.usuario
         {
             _repository = repository;
         }
-
+        
         [HttpGet("GetUsuario")]
         public async Task<IActionResult> Get()
         {

@@ -34,7 +34,7 @@ namespace SGHR.Api.Controllers.usuario
             }
             return Ok(Cliente);
         }
-
+        
         [HttpPost("SaveCliente")]
         public async Task<IActionResult> Post([FromBody] Cliente Cliente)
         {
