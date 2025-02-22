@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.reserva;
-
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SGHR.Api.Controllers.reserva
 {
@@ -16,30 +18,59 @@ namespace SGHR.Api.Controllers.reserva
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult<IEnumerable<Reserva>>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var reservas = await _repository.GetAllAsync();
+            return Ok(reservas);
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<Reserva>> Get(int id)
         {
-            return "value";
+            var reserva = await _repository.GetEntityByIdAsync(id);
+            if (reserva == null)
+            {
+                return NotFound();
+            }
+            return Ok(reserva);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] Reserva reserva)
         {
+            var result = await _repository.RealizarReservaAsync(reserva);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return CreatedAtAction(nameof(Get), new { id = reserva.IdReserva }, reserva);
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] Reserva reserva)
         {
+            if (id != reserva.IdReserva)
+            {
+                return BadRequest();
+            }
+
+            var result = await _repository.UpdateEntityAsync(reserva);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            var result = await _repository.CancelarReservaAsync(id);
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+            return NoContent();
         }
     }
 }
