@@ -45,7 +45,15 @@ namespace SGHR.Persistence.Repositories.usuario
                                        FechaCreacion = r.FechaCreacion,
 
                                    }).ToListAsync();
+
+                if (Query == null || !Query.Any()) 
+                {
+                    result.Message = "Consulta no encontrada";
+                    result.Success = false;
+                }
+
                 result.Data = Query;
+                result.Success = true;
             }
             catch (Exception ex) 
             {
