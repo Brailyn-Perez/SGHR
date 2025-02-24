@@ -8,6 +8,7 @@ using SGHR.Model.Model.usuario;
 using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
+using System.Data.SqlTypes;
 using System.Runtime.CompilerServices;
 
 
@@ -51,10 +52,17 @@ namespace SGHR.Persistence.Repositories.usuario
                                        Observacion = r.Observacion,
                                        TotalPagado = r.TotalPagado,
                                        Estado = r.Estado,
-
-
                                    }).ToListAsync();
+
+                if (Query == null || !Query.Any()) 
+                {
+                    result.Message = "Reserva del cliente no encontrada";
+                    result.Success = false;
+                }
+
                 result.Data = Query;
+                result.Success = true;
+
             }
             catch (Exception ex) 
             {

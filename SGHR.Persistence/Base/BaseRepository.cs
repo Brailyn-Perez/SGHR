@@ -31,6 +31,7 @@ namespace SGHR.Persistence.Base
                 Entity.Update(entity);
                 await _Context.SaveChangesAsync();
                 Result.Success = true;
+                Result.Message = "Datos Actualizados Correctamente";
 
             }
             catch (Exception ex)
@@ -49,6 +50,7 @@ namespace SGHR.Persistence.Base
                 Entity.Add(entity);
                 await _Context.SaveChangesAsync();
                 Result.Success = true;
+                Result.Message = "Datos Ingresados Correctamente";
 
             }
             catch (Exception ex)
@@ -72,6 +74,7 @@ namespace SGHR.Persistence.Base
             {
                 await Entity.Where(filter).ToListAsync();
                 Result.Success = true;
+                Result.Message = "Datos Obtenidos Correctamente";
 
             }
             catch (Exception ex)
