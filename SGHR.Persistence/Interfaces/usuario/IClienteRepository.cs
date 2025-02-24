@@ -8,5 +8,6 @@ namespace SGHR.Persistence.Interfaces.usuario
     public interface IClienteRepository : IBaseRepository<Cliente>
     {
         public Task<OperationResult> GetCienteByReservas(Cliente cliente);
+
     }
 }
