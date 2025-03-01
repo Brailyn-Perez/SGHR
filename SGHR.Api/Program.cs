@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using SGHR.Api.DependencyInjection;
+using SGHR.IOC.DependencyInjection;
 using SGHR.Persistence.Context;
 
 namespace SGHR.Api
