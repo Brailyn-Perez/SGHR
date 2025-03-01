@@ -82,5 +82,10 @@ namespace SGHR.Persistence.Repositories.servicio
                 .ToListAsync();
         }
 
+        public override Task<List<Servicios>> GetAllAsync()
+        {
+            return base.GetAllAsync();
+        }
+
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SGHR.Domain.Entities.servicio;
 using SGHR.Persistence.Interfaces.servicio;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace SGHR.Api.Controllers.servicio
 {
@@ -43,7 +41,7 @@ namespace SGHR.Api.Controllers.servicio
             {
                 return BadRequest(result.Message);
             }
-            return CreatedAtAction(nameof(Get), new { id = servicio.IdServicio }, servicio);
+            return Ok(servicio);
         }
 
         [HttpPut("{id}")]
@@ -62,39 +60,39 @@ namespace SGHR.Api.Controllers.servicio
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var servicio = await _repository.GetEntityByIdAsync(id);
-            if (servicio == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult> Delete(int id)
+        //{
+        //    var servicio = await _repository.GetEntityByIdAsync(id);
+        //    if (servicio == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var result = await _repository.UpdateEntityAsync(servicio);
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-            return NoContent();
-        }
+        //    var result = await _repository.UpdateEntityAsync(servicio);
+        //    if (!result.Success)
+        //    {
+        //        return BadRequest(result.Message);
+        //    }
+        //    return NoContent();
+        //}
 
-        [HttpPost("AsociarServicioACategoria")]
-        public async Task<ActionResult> AsociarServicioACategoria(int idServicio, int idCategoria)
-        {
-            var result = await _repository.AsociarServicioACategoriaAsync(idServicio, idCategoria);
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-            return Ok(result.Message);
-        }
+        //[HttpPost("AsociarServicioACategoria")]
+        //public async Task<ActionResult> AsociarServicioACategoria(int idServicio, int idCategoria)
+        //{
+        //    var result = await _repository.AsociarServicioACategoriaAsync(idServicio, idCategoria);
+        //    if (!result.Success)
+        //    {
+        //        return BadRequest(result.Message);
+        //    }
+        //    return Ok(result.Message);
+        //}
 
-        [HttpGet("ObtenerServiciosPorCategoria/{idCategoria}")]
-        public async Task<ActionResult<List<Servicios>>> ObtenerServiciosPorCategoria(int idCategoria)
-        {
-            var servicios = await _repository.ObtenerServiciosPorCategoriaAsync(idCategoria);
-            return Ok(servicios);
-        }
+        //[HttpGet("ObtenerServiciosPorCategoria/{idCategoria}")]
+        //public async Task<ActionResult<List<Servicios>>> ObtenerServiciosPorCategoria(int idCategoria)
+        //{
+        //    var servicios = await _repository.ObtenerServiciosPorCategoriaAsync(idCategoria);
+        //    return Ok(servicios);
+        //}
     }
 }

@@ -46,8 +46,8 @@ namespace SGHR.Domain.Entities.reserva
         [StringLength(500)]
         public string Observacion { get; set; }
 
-        [Required]
-        public int NumeroHuespedes { get; set; }
+        //[Required]
+        //public int NumeroHuespedes { get; set; }
 
         public bool? Estado { get; set; }
 

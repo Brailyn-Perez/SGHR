@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.reserva;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
 
 namespace SGHR.Api.Controllers.reserva
 {
@@ -11,10 +10,12 @@ namespace SGHR.Api.Controllers.reserva
     public class ReservaController : ControllerBase
     {
         private readonly IReservaRepository _repository;
+        private readonly ILogger<ReservaController> _logger;
 
-        public ReservaController(IReservaRepository repository)
+        public ReservaController(IReservaRepository repository, ILogger<ReservaController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -62,15 +63,15 @@ namespace SGHR.Api.Controllers.reserva
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var result = await _repository.CancelarReservaAsync(id);
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-            return NoContent();
-        }
+        //[HttpPut("RealizarReserva")]
+        //public async Task<IActionResult> Reservar([FromBody] Reserva reserva)
+        //{
+        //    var result = await _repository.RealizarReservaAsync(reserva);
+        //    if (!result.Success)
+        //    {
+        //        return BadRequest(result);
+        //    }
+        //    return Ok(result);
+        //}
     }
 }
