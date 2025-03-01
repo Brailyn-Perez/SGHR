@@ -1,4 +1,5 @@
-﻿using SGHR.Persistence.Interfaces.habitacion;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;
 using SGHR.Persistence.Interfaces.servicio;
 using SGHR.Persistence.Interfaces.usuario;
@@ -7,7 +8,8 @@ using SGHR.Persistence.Repositories.reserva;
 using SGHR.Persistence.Repositories.servicio;
 using SGHR.Persistence.Repositories.usuario;
 
-namespace SGHR.Api.DependencyInjection
+
+namespace SGHR.IOC.DependencyInjection
 {
     public static class DependencyInjections
     {
