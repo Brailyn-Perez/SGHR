@@ -1,27 +1,27 @@
 ﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using SGHR.Application.DTos.usuario.Cliente;
+using SGHR.Application.DTos.usuario.Usuario;
 using SGHR.Application.Interfaces.usuario;
 using SGHR.Domain.Base;
 using SGHR.Persistence.Interfaces.usuario;
 
-
 namespace SGHR.Application.Service.usuario
 {
-    public class ClienteService : IClienteService
+    public class UsuarioService : IUsuarioService
     {
-        private readonly IClienteRepository _clienteRepository;
-        private readonly ILogger<ClienteService> _logger;
-        private readonly IConfiguration _configuraticon;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ILogger<UsuarioService> _logger;
+        private readonly IConfiguration _configuration;
+        
 
-        public ClienteService(IClienteRepository clienteRepository,
-            ILogger<ClienteService> logger,
-            IConfiguration configuraticon)
+        public UsuarioService(IUsuarioRepository usuarioRepository,
+            ILogger<UsuarioService> logger,
+            IConfiguration configuration)
         {
-            _clienteRepository = clienteRepository;
+            _usuarioRepository = usuarioRepository;
             _logger = logger;
-            _configuraticon = configuraticon;
+            _configuration = configuration;
         }
         public Task<OperationResult> GeAll()
         {
@@ -33,17 +33,17 @@ namespace SGHR.Application.Service.usuario
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult> Remove(UpdateClienteDTo dto)
+        public Task<OperationResult> Remove(UpdateUsuarioDTo dto)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult> Save(SaveClienteDTo dto)
+        public Task<OperationResult> Save(SaveUsuarioDTo dto)
         {
             throw new NotImplementedException();
         }
 
-        public Task<OperationResult> Update(RemoveClienteDTo dto)
+        public Task<OperationResult> Update(RemoveUsuarioDTo dto)
         {
             throw new NotImplementedException();
         }
