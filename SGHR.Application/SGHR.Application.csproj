@@ -11,8 +11,4 @@
 		<ProjectReference Include="..\SGHR.Persistence\SGHR.Persistence.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Service\habitacion\" />
-	</ItemGroup>
-
 </Project>
