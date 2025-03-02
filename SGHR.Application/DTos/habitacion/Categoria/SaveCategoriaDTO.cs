@@ -1,16 +1,11 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using SGHR.Application.DTos.DToBase;
 using System.ComponentModel.DataAnnotations;
-using SGHR.Domain.Base;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Domain.Entities.habitacion
+namespace SGHR.Application.DTos.habitacion.Categoria
 {
-    [Table("EstadoHabitacion", Schema = "habitacion")]
-    public class EstadoHabitacion : AuditoryEntity
+    public class SaveCategoriaDTO : DToBases
     {
-        [Key]
-        public int IdEstadoHabitacion { get; set; }
         [Required]
         [StringLength(50)]
         [MaxLength(50)]
@@ -18,5 +13,9 @@ namespace SGHR.Domain.Entities.habitacion
         [NotNull]
         public string Descripcion { get; set; }
         public bool? Estado { get; set; } = true;
+        [Required]
+        [NotNull]
+        [Range(1, int.MaxValue)]
+        public int IdServicio { get; set; }
     }
 }

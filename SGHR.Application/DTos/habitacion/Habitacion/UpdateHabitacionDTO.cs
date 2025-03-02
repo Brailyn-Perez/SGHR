@@ -1,15 +1,15 @@
-﻿
+﻿using SGHR.Application.DTos.DToBase;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using SGHR.Domain.Base;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Domain.Entities.habitacion
+namespace SGHR.Application.DTos.habitacion.Habitacion
 {
-    [Table("Habitacion", Schema = "habitacion")]
-    public class Habitacion : AuditoryEntity
+    public class UpdateHabitacionDTO :DToBases
     {
-        [Key]
+        [Required]
+        [NotNull]
+        [Range(1, int.MaxValue)]
         public int IdHabitacion { get; set; }
         [Required]
         [StringLength(50)]
@@ -25,11 +25,6 @@ namespace SGHR.Domain.Entities.habitacion
         [Required]
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Precio { get; set; }
-
-        public int IdEstadoHabitacion { get; set; }
-        public int IdPiso { get; set; }
-        public int IdCategoria { get; set; }
         public bool? Estado { get; set; } = true;
-
     }
 }

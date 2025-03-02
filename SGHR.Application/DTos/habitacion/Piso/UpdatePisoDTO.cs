@@ -1,16 +1,16 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
+using SGHR.Application.DTos.DToBase;
 using System.ComponentModel.DataAnnotations;
-using SGHR.Domain.Base;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Domain.Entities.habitacion
+namespace SGHR.Application.DTos.habitacion.Piso
 {
-    [Table("EstadoHabitacion", Schema = "habitacion")]
-    public class EstadoHabitacion : AuditoryEntity
+    public class UpdatePisoDTO :DToBases
     {
-        [Key]
-        public int IdEstadoHabitacion { get; set; }
+        [Required]
+        [Range(1, int.MaxValue)]
+        [NotNull]
+        public int IdPiso { get; set; }
         [Required]
         [StringLength(50)]
         [MaxLength(50)]

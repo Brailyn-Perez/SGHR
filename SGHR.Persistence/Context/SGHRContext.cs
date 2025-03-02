@@ -30,25 +30,6 @@ namespace SGHR.Persistence.Context
             base.OnModelCreating(modelBuilder);
 
             // Relaciones
-            modelBuilder.Entity<Categoria>()
-                .HasOne(c => c.Servicios)
-                .WithMany()
-                .HasForeignKey(c => c.IdServicio);
-
-            modelBuilder.Entity<Habitacion>()
-                .HasOne(h => h.EstadoHabitacion)
-                .WithMany()
-                .HasForeignKey(h => h.IdEstadoHabitacion);
-
-            modelBuilder.Entity<Habitacion>()
-                .HasOne(h => h.Piso)
-                .WithMany()
-                .HasForeignKey(h => h.IdPiso);
-
-            modelBuilder.Entity<Habitacion>()
-                .HasOne(h => h.Categoria)
-                .WithMany()
-                .HasForeignKey(h => h.IdCategoria);
 
             modelBuilder.Entity<Reserva>()
                 .HasOne(r => r.Cliente)
@@ -60,10 +41,6 @@ namespace SGHR.Persistence.Context
                 .WithMany()
                 .HasForeignKey(r => r.IdHabitacion);
 
-            modelBuilder.Entity<Tarifa>()
-                .HasOne(t => t.Habitacion)
-                .WithMany()
-                .HasForeignKey(t => t.IdHabitacion);
 
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.RolUsuario)

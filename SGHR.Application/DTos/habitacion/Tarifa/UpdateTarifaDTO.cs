@@ -1,15 +1,13 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using SGHR.Domain.Base;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Domain.Entities.habitacion
+namespace SGHR.Application.DTos.habitacion.Tarifa
 {
-    [Table("Tarifas", Schema = "habitacion")]
-    public class Tarifa : AuditoryEntity
+    public class UpdateTarifaDTO
     {
-        [Key]
+        [Required]
+        [NotNull]
+        [Range(1,int.MaxValue)]
         public int IdTarifa { get; set; }
         [Required]
         [Range(1, int.MaxValue)]
@@ -19,10 +17,8 @@ namespace SGHR.Domain.Entities.habitacion
         [Required]
         public DateTime FechaFin { get; set; }
         [Required]
-        [Column(TypeName = "money")]
         public decimal PrecioPorNoche { get; set; }
         [Required]
-        [Column(TypeName = "numeric(5, 2)")]
         public decimal Descuento { get; set; }
         [Required]
         [StringLength(255)]
@@ -31,6 +27,5 @@ namespace SGHR.Domain.Entities.habitacion
         [NotNull]
         public string Descripcion { get; set; }
         public bool? Estado { get; set; } = true;
-
     }
 }
