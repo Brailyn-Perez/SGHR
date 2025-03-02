@@ -72,7 +72,7 @@ namespace SGHR.Persistence.Base
         {
             try
             {
-                await Entity.Where(filter).ToListAsync();
+                Result.Data = await Entity.Where(filter).ToListAsync();
                 Result.Success = true;
                 Result.Message = "Datos Obtenidos Correctamente";
 
