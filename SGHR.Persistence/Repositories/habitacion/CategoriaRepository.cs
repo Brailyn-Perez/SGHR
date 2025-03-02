@@ -67,41 +67,6 @@ namespace SGHR.Persistence.Repositories.habitacion
             return result;
         }
 
-        public async Task<OperationResult> GetAllCategoriasDisponibles()
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var query = await _context.Categorias.AllAsync(x => x.Estado == true);
-                result.Data = query;
-            }
-            catch (Exception ex)
-            {
-                result.Message = _configuration["ErrorCategoriaRepository:GetAllCategoriasDisponibles"];
-                result.Success = false;
-                _logger.LogError(result.Message, ex.ToString());
-            }
-            return result;
-        }
-
-        public async Task<OperationResult> GetCategoriaByServicios(Servicios servicios)
-        {
-            OperationResult result = new OperationResult();
-            try
-            {
-                var query = await _context.Categorias.AllAsync(x => x.Servicios == servicios);
-                result.Data = query;
-            }
-            catch (Exception ex)
-            {
-                result.Message = _configuration["ErrorCategoriaRepository:GetCategoriaByServicios"];
-                result.Success = false;
-                _logger.LogError(result.Message, ex.ToString());
-            }
-
-            return result;
-        }
-
         public override async Task<OperationResult> UpdateEntityAsync(Categoria entity)
         {
             OperationResult result = new OperationResult();
