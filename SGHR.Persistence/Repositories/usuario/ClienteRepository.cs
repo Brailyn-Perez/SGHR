@@ -1,4 +1,5 @@
 ﻿
+using MedicalAppointment.Persistence.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -74,6 +75,28 @@ namespace SGHR.Persistence.Repositories.usuario
             return result;
         }
 
+        public override async Task<OperationResult> SaveEntityAsync(Cliente entity)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                var Validator = await BaseValidator<Cliente>.ValidateEntityAsync(entity);
+
+                if (!Validator.Success) 
+                {
+                    return Validator;
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:SaveEntityAsync"];
+                _logger.LogError(ex.Message, result.Message);
+
+            }
+            return result;
+        }
         public async override Task<List<Cliente>> GetAllAsync() 
         {
             return await _context.Clientes.Where(cd => cd.Borrado == false).ToListAsync();
