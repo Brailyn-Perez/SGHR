@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Interfaces.habitacion;
 
 
@@ -16,34 +17,57 @@ namespace SGHR.Api.Controllers.habitacion
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var value = await _repository.GetAllAsync(x => x.Borrado == false);
+            return StatusCode(StatusCodes.Status200OK, new { value });
         }
 
         
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var value = await _repository.GetEntityByIdAsync(id);
+
+            return StatusCode(StatusCodes.Status200OK , new {value});
         }
 
         
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Piso piso)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            var response = await _repository.SaveEntityAsync(piso);
+            return StatusCode(StatusCodes.Status200OK, new {piso});
         }
 
         
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Piso piso)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            piso.IdPiso = id;
+            piso.FechaActualizacion = DateTime.Now;
+            piso.UsuarioActualizacion = 1;
+
+            var response = await _repository.UpdateEntityAsync(piso);
+            return StatusCode(StatusCodes.Status200OK, new { piso });
         }
 
         
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var response = await _repository.DeletePiso(id);
+            return StatusCode(StatusCodes.Status200OK, new { response });
         }
     }
 }

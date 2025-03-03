@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Interfaces.habitacion;
 
 
@@ -16,30 +17,49 @@ namespace SGHR.Api.Controllers.habitacion
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var value = await _repository.GetAllAsync(x => x.Borrado == false);
+            return StatusCode(StatusCodes.Status200OK, new { value });
         }
+
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
-        }
-    
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-        
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+            var value = await _repository.GetEntityByIdAsync(id);
+
+            return StatusCode(StatusCodes.Status200OK, new { value });
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] EstadoHabitacion estadoHabitacion)
         {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            var response = await _repository.SaveEntityAsync(estadoHabitacion);
+            return StatusCode(StatusCodes.Status200OK, new { estadoHabitacion });
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] EstadoHabitacion estadoHabitacion)
+        {
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            estadoHabitacion.IdEstadoHabitacion = id;
+            estadoHabitacion.FechaActualizacion = DateTime.Now;
+            estadoHabitacion.UsuarioActualizacion = 1;
+
+            var response = await _repository.UpdateEntityAsync(estadoHabitacion);
+            return StatusCode(StatusCodes.Status200OK, new { estadoHabitacion });
         }
     }
 }
