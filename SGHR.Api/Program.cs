@@ -19,11 +19,8 @@ namespace SGHR.Api
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<SGHRContext>(options => 
-<<<<<<<<< Temporary merge branch 1
-            options.UseSqlServer(builder.Configuration.GetConnectionString("BrailynConnection")));
-=========
             options.UseSqlServer(builder.Configuration.GetConnectionString("LeandroConnection")));
->>>>>>>>> Temporary merge branch 2
+
 
             // aqui es donde se inyectan todas las dependencias necesarias
             builder.Services.AddAplicationServices();
