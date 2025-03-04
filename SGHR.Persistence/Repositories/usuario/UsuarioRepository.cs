@@ -1,4 +1,5 @@
 ﻿
+using MedicalAppointment.Persistence.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -51,6 +52,68 @@ namespace SGHR.Persistence.Repositories.usuario
 
             }
             return result;
+        }
+        public override async Task<OperationResult> SaveEntityAsync(Usuario entity)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<Usuario>.ValidateEntityAsync(entity);
+                if (!validator.Success)
+                {
+                    return validator;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorUsuarioRepository:SaveEntityAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+        public override async Task<Usuario> GetEntityByIdAsync(int id)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<Usuario>.ValidateID(id);
+                if (!validator.Success)
+                {
+                    throw new Exception("El Id es invalido");
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorUsuarioRepository:GetEntityByIdAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return await base.GetEntityByIdAsync(id);
+        }
+        public override async Task<OperationResult> UpdateEntityAsync(Usuario entity)
+        {
+            OperationResult result = new OperationResult();
+
+            try
+            {
+                var validator = await BaseValidator<Usuario>.ValidateEntityAsync(entity);
+                if (!validator.Success)
+                {
+                    return validator;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorUsuarioRepository:UpdateEntityAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+        public override async Task<List<Usuario>> GetAllAsync()
+        {
+            return await _context.Usuarios.Where(cd => cd.Borrado == false).ToListAsync();
         }
     }
 }
