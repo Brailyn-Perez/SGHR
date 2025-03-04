@@ -74,7 +74,6 @@ namespace SGHR.Persistence.Repositories.usuario
 
             return result;
         }
-
         public override async Task<OperationResult> SaveEntityAsync(Cliente entity)
         {
             OperationResult result = new OperationResult();
@@ -92,6 +91,45 @@ namespace SGHR.Persistence.Repositories.usuario
             {
                 result.Success = false;
                 result.Message = _configuration["ErrorClienteRepository:SaveEntityAsync"];
+                _logger.LogError(ex.Message, result.Message);
+
+            }
+            return result;
+        }
+        public override async Task<Cliente> GetEntityByIdAsync(int id)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<Cliente>.ValidateID(id);
+                if (!validator.Success) 
+                {
+                    throw new Exception("El ID es invalido");
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:GetEntityByIdAsync"];
+                _logger.LogError(ex.Message, result.Message);
+            }
+            return await base.GetEntityByIdAsync(id);
+        }
+        public override async Task<OperationResult> UpdateEntityAsync(Cliente entity)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<Cliente>.ValidateEntityAsync(entity);
+                if (!validator.Success) 
+                {
+                    return validator;
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:UpdateEntityAsync"];
                 _logger.LogError(ex.Message, result.Message);
 
             }
