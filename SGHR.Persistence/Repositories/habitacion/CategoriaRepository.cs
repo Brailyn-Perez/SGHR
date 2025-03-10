@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MedicalAppointment.Persistence.Base;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Domain.Base;
@@ -75,5 +76,28 @@ namespace SGHR.Persistence.Repositories.habitacion
             return base.GetEntityByIdAsync(id);
         }
 
+        public async Task<OperationResult> GetHabitacionByCategoriaId(int Id)
+        {
+            OperationResult result = new();
+            try
+            {
+               var isValid = await BaseValidator<Categoria>.ValidateID(Id);
+                if (!isValid.Success)
+                    return isValid;
+
+                await _context.Habitaciones.AnyAsync(x => x.IdCategoria == Id);
+
+                result.Success = true;
+                result.Message = "Hay una habitacion asignada";
+
+            }
+            catch (Exception ex)
+            {
+                result.Message = _configuration["ErrorCategoriaRepository:SaveEntityAsync"] ?? "Error al guardar la categoría";
+                result.Success = false;
+                _logger.LogError(result.Message, ex);
+            }
+            return result;
+        }
     }
 }
