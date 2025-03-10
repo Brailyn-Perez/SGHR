@@ -85,11 +85,18 @@ namespace SGHR.Persistence.Repositories.habitacion
                 if (!isValid.Success)
                     return isValid;
 
-                await _context.Habitaciones.AnyAsync(x => x.IdCategoria == Id);
+                var exist = await _context.Habitaciones.AnyAsync(x => x.IdCategoria == Id);
 
-                result.Success = true;
-                result.Message = "Hay una habitacion asignada";
-
+                if (exist)
+                {
+                    result.Success = true;
+                    result.Message = "Hay una habitacion asignada";
+                }
+                else
+                {
+                    result.Success = false;
+                    result.Message = "No hay habitacion asignada";
+                }
             }
             catch (Exception ex)
             {

@@ -79,6 +79,16 @@ namespace SGHR.Application.Service.habitacion
                     result.Message = _configuration["CategoryNotFound"];
                     return result;
                 }
+
+                var tieneHabitacionAsignada = await _repository.GetHabitacionByCategoriaId(dto.IdCategoria);
+
+                if (tieneHabitacionAsignada.Success)
+                {
+                    result.Success = false;
+                    result.Message = "No es permitido eliminar categorias con habitaciones asignadas";
+                    return result;
+                }
+                    
                 category.Borrado = true;
                 category.FechaEliminado = DateTime.UtcNow;
 
