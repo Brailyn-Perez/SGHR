@@ -38,6 +38,8 @@ namespace SGHR.Persistence.Repositories.habitacion
                 result.Success = false;
                 _logger.LogError(result.Message, ex);
             }
+
+            result.Success = true;
             return result;
         }
 

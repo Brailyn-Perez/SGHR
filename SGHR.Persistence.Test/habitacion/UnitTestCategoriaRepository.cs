@@ -22,7 +22,7 @@ namespace SGHR.Persistence.Test.habitacion
             var categoria = new Categoria
             {
                 IdCategoria = 1,
-                Descripcion = "description2",
+                Descripcion = "description",
                 Borrado = false
             };
 
