@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using SGHR.Persistence.Context;
-using SGHR.Persistence.Repositories.habitacion;
 
 namespace SGHR.Persistence.Test.habitacion.Base
 {
