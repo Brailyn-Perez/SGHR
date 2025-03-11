@@ -4,12 +4,12 @@ using SGHR.Persistence.Repositories.usuario;
 
 namespace SGHR.Persistence.Test;
 
-public class ClienteUnitTest
+public class UnitTestClienteRepository
 {
     private readonly IClienteRepository clienteRepository;
 
 
-    public ClienteUnitTest()
+    public UnitTestClienteRepository()
     {
         
     }
