@@ -19,7 +19,8 @@ namespace SGHR.Api
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<SGHRContext>(options => 
-            options.UseSqlServer(builder.Configuration.GetConnectionString("BrailynConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("LeandroConnection")));
+
 
             // aqui es donde se inyectan todas las dependencias necesarias
             builder.Services.AddAplicationServices();
