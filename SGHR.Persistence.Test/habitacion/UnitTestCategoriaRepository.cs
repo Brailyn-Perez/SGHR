@@ -1,26 +1,16 @@
-﻿
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Moq;
-using SGHR.Domain.Entities.habitacion;
-using SGHR.Persistence.Context;
+﻿using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Repositories.habitacion;
+using SGHR.Persistence.Test.habitacion.Base;
 
 namespace SGHR.Persistence.Test.habitacion
 {
-    public class CategoriaRepositoryTests
+    public class CategoriaRepositoryTests : BaseTest
     {
-        private readonly Mock<SGHRContext> _mockContext;
-        private readonly Mock<ILogger<CategoriaRepository>> _mockLogger;
-        private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly CategoriaRepository _categoriaRepository;
 
         public CategoriaRepositoryTests()
         {
-            _mockContext = new Mock<SGHRContext>();
-            _mockLogger = new Mock<ILogger<CategoriaRepository>>();
-            _mockConfiguration = new Mock<IConfiguration>();
-            _categoriaRepository = new CategoriaRepository(_mockContext.Object, _mockLogger.Object, _mockConfiguration.Object);
+            _categoriaRepository = new CategoriaRepository(_context, _mockLogger.Object, _mockConfiguration.Object);
         }
 
         #region "SaveEntity"
