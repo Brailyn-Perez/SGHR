@@ -7,6 +7,5 @@ namespace SGHR.Persistence.Interfaces.habitacion
 {
     public interface IPisoRepository : IBaseRepository<Piso>
     {
-        public Task<OperationResult> DeletePiso(int id);
     }
 }
