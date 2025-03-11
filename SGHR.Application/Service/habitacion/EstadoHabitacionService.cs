@@ -1,48 +1,155 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using MedicalAppointment.Persistence.Base;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Application.DTos.habitacion.EstadoHabitacion;
 using SGHR.Application.Interfaces.habitacion;
 using SGHR.Domain.Base;
+using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Interfaces.habitacion;
 
 namespace SGHR.Application.Service.habitacion
 {
     public class EstadoHabitacionService : IEstadoHabitacionService
     {
-        private readonly IEstadoHabitacionRepository _Repository;
+        private readonly IEstadoHabitacionRepository _repository;
         private readonly ILogger<EstadoHabitacionService> _logger;
         private readonly IConfiguration _configuration;
 
         public EstadoHabitacionService(IEstadoHabitacionRepository repository, ILogger<EstadoHabitacionService> logger, IConfiguration configuration)
         {
-            _Repository = repository;
+            _repository = repository;
             _logger = logger;
             _configuration = configuration;
         }
 
-        public Task<OperationResult> GeAll()
+
+        public async Task<OperationResult> GeAll()
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var estados = await _repository.GetAllAsync(x => x.Borrado == false);
+                result.Success = true;
+                result.Data = estados;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorGetAllEstadoHabitacion"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
 
-        public Task<OperationResult> GeById(int id)
+        public async Task<OperationResult> GeById(int id)
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var estado = await _repository.GetEntityByIdAsync(id);
+                if (estado == null)
+                {
+                    result.Success = false;
+                    result.Message = _configuration["EstadoHabitacionNotFound"];
+                    return result;
+                }
+                result.Success = true;
+                result.Data = estado;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorGetEstadoHabitacionById"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
 
-        public Task<OperationResult> Remove(RemoveEstadoHabitacionDTO dto)
+        public async Task<OperationResult> Remove(RemoveEstadoHabitacionDTO dto)
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var estado = await _repository.GetEntityByIdAsync(dto.IdEstadoHabitacion);
+                if (estado == null)
+                {
+                    result.Success = false;
+                    result.Message = _configuration["EstadoHabitacionNotFound"];
+                    return result;
+                }
+
+                estado.Borrado = true;
+                estado.FechaEliminado = DateTime.UtcNow;
+
+                await _repository.UpdateEntityAsync(estado);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorRemoveEstadoHabitacion"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
 
-        public Task<OperationResult> Save(SaveEstadoHabitacionDTO dto)
+        public async Task<OperationResult> Save(SaveEstadoHabitacionDTO dto)
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var estado = new EstadoHabitacion
+                {
+                };
+
+                var isValid = await BaseValidator<EstadoHabitacion>.ValidateEntityAsync(estado);
+                if (!isValid.Success)
+                {
+                    return isValid;
+                }
+
+                await _repository.SaveEntityAsync(estado);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorSaveEstadoHabitacion"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
 
-        public Task<OperationResult> Update(UpdateEstadoHabitacionDTO dto)
+        public async Task<OperationResult> Update(UpdateEstadoHabitacionDTO dto)
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var estado = await _repository.GetEntityByIdAsync(dto.IdEstadoHabitacion);
+                if (estado == null)
+                {
+                    result.Success = false;
+                    result.Message = _configuration["EstadoHabitacionNotFound"];
+                    return result;
+                }
+
+
+                var isValid = await BaseValidator<EstadoHabitacion>.ValidateEntityAsync(estado);
+                if (!isValid.Success)
+                {
+                    return isValid;
+                }
+
+                await _repository.UpdateEntityAsync(estado);
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorUpdateEstadoHabitacion"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
     }
 }
