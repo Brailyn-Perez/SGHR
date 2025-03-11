@@ -1,7 +1,7 @@
 ﻿
 namespace SGHR.Persistence.Test.habitacion
 {
-    public class UnitTestHabitacion
+    public class UnitTestTarifaRepository
     {
     }
 }
