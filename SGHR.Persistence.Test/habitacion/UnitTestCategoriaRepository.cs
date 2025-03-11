@@ -19,9 +19,8 @@ namespace SGHR.Persistence.Test.habitacion
         public async Task SaveEntityAsync_ShouldReturnSuccess_WhenEntityIsSaved()
         {
             // Arrange
-            var categoria = new Categoria
+            var categoria = new Categoria()
             {
-                IdCategoria = 1,
                 Descripcion = "description",
                 Borrado = false
             };

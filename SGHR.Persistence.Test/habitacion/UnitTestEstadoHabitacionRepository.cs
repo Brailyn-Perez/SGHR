@@ -18,9 +18,8 @@ namespace SGHR.Persistence.Test.habitacion
         public async Task SaveEntityAsync_ShouldReturnSuccess_WhenEntityIsSaved()
         {
             // Arrange
-            var estadoHabitacion = new EstadoHabitacion
+            var estadoHabitacion = new EstadoHabitacion()
             {
-                IdEstadoHabitacion = 1,
                 Descripcion = "Estado activo 2",
                 Estado = true
             };

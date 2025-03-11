@@ -20,7 +20,6 @@ namespace SGHR.Persistence.Test.habitacion
             // Arrange
             var tarifa = new Tarifa
             {
-                IdTarifa = 1,
                 IdHabitacion = 1,
                 FechaInicio = DateTime.Now,
                 FechaFin = DateTime.Now.AddDays(5),

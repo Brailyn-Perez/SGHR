@@ -18,11 +18,10 @@ namespace SGHR.Persistence.Test.habitacion
         public async Task SaveEntityAsync_ShouldReturnSuccess_WhenEntityIsSaved()
         {
             // Arrange
-            var piso = new Piso
+            var piso = new Piso()
             {
-                IdPiso = 1,
-                Descripcion = "Piso 2",
-                Estado = true
+                Descripcion = "Piso 35",
+                Estado = true,
             };
 
             // Act
@@ -134,7 +133,12 @@ namespace SGHR.Persistence.Test.habitacion
         public async Task GetAllAsync_ShouldReturnSuccess_WhenDataExists()
         {
             // Arrange
-            await _pisoRepository.SaveEntityAsync(new Piso { IdPiso = 1, Descripcion = "Piso 2", Estado = true , Borrado = false});
+            var piso = new Piso()
+            {
+                Descripcion = "Descripcion Valida",
+                Estado = true
+            };
+            await _pisoRepository.SaveEntityAsync(piso);
 
             // Act
             var result = await _pisoRepository.GetAllAsync(pi => pi.Borrado == false);

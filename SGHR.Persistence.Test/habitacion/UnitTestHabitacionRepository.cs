@@ -18,9 +18,8 @@ namespace SGHR.Persistence.Test.habitacion
         public async Task SaveEntityAsync_ShouldReturnSuccess_WhenEntityIsSaved()
         {
             // Arrange
-            var habitacion = new Habitacion
+            var habitacion = new Habitacion()
             {
-                IdHabitacion = 1,
                 Numero = "1011",
                 Detalle = "Habitación estándar",
                 Precio = 150.00m,

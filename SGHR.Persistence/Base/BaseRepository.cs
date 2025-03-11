@@ -44,6 +44,7 @@ namespace SGHR.Persistence.Base
 
         public virtual async Task<OperationResult> SaveEntityAsync(TEntity entity)
         {
+            OperationResult Result = new OperationResult();
             try
             {
                 Entity.Add(entity);
