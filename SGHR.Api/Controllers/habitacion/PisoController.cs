@@ -61,13 +61,5 @@ namespace SGHR.Api.Controllers.habitacion
             var response = await _repository.UpdateEntityAsync(piso);
             return StatusCode(StatusCodes.Status200OK, new { piso });
         }
-
-        
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var response = await _repository.DeletePiso(id);
-            return StatusCode(StatusCodes.Status200OK, new { response });
-        }
     }
 }

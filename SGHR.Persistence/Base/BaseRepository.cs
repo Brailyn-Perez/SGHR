@@ -1,5 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SGHR.Domain.Base;
 using SGHR.Domain.Repository;
 using SGHR.Persistence.Context;
@@ -45,6 +44,7 @@ namespace SGHR.Persistence.Base
 
         public virtual async Task<OperationResult> SaveEntityAsync(TEntity entity)
         {
+            OperationResult Result = new OperationResult();
             try
             {
                 Entity.Add(entity);

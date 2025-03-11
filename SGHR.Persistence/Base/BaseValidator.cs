@@ -62,6 +62,7 @@ namespace MedicalAppointment.Persistence.Base
                 result.Message = "Errores de validación: " + string.Join(", ", validationResults.Select(v => v.ErrorMessage));
             }
 
+            result.Success = true;
             return result;
         }
     }
