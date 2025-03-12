@@ -177,7 +177,7 @@ public class UnitTestUsuarioRepository : BaseTest<UsuarioRepository>
     }
 
     [Fact]
-    public async Task UpdateEntityAsync_ShouldReturnSuccess_WhenClienteParamethersIsNull()
+    public async Task UpdateEntityAsync_ShouldReturnSuccess_WhenUsuarioParamethersIsNull()
     {
         // Arrange
         var usuario = new Usuario();
