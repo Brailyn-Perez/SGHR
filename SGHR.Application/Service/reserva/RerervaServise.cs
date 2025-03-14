@@ -1,7 +1,10 @@
 ﻿
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using SGHR.Application.DTos.reserva.Reserva;
+using SGHR.Application.Interfaces.reserva;
 using SGHR.Application.Service.habitacion;
+using SGHR.Application.Service.Manejo;
 using SGHR.Domain.Base;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.habitacion;
@@ -10,57 +13,132 @@ using System.Linq.Expressions;
 
 namespace SGHR.Application.Service.reserva
 {
-    public class RerervaServise : IReservaRepository
+    public class RerervaServise : IReservaService
     {
-        private readonly ICategoriaRepository _Repository;
+        private readonly IReservaRepository _Repository;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<CategoriaService> _logger;
+        private readonly ILogger<ServiciosRespository> _logger;
 
-        public RerervaServise(ICategoriaRepository repository, IConfiguration configuration, ILogger<CategoriaService> logger)
+        public RerervaServise(IReservaRepository repository, IConfiguration configuration, ILogger<ServiciosRespository> logger)
         {
             _Repository = repository;
             _configuration = configuration;
             _logger = logger;
         }
 
-        public Task<OperationResult> CancelarReservaAsync(int idReserva)
+        public async Task<OperationResult> GeAll()
         {
-            throw new NotImplementedException();
+            OperationResult result = new();
+            result.Data = await _Repository.GetAllAsync();
+            return result;
         }
 
-        public Task<bool> ExistsAsync(Expression<Func<Reserva, bool>> filter)
+        public async Task<OperationResult> GeById(int id)
         {
-            throw new NotImplementedException();
+            OperationResult result = new();
+            result.Data = await _Repository.GetEntityByIdAsync(id);
+            return result;
         }
 
-        public Task<List<Reserva>> GetAllAsync()
+        public async Task<OperationResult> Remove(RemoveReservaDTO dto)
         {
-            throw new NotImplementedException();
+            OperationResult result = new();
+            try
+            {
+                var entity = await _Repository.GetEntityByIdAsync(dto.IdReserva);
+                if (entity == null)
+                {
+                    result.Success = false;
+                    result.Message = "Reserva no encontrada.";
+                    return result;
+                }
+
+                entity.Borrado = true;
+                result.Data = await _Repository.UpdateEntityAsync(entity);
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorAlRemoverLaEntidad:Remove"];
+                _logger.LogError(result.Message, result.Success);
+            }
+            return result;
         }
 
-        public Task<OperationResult> GetAllAsync(Expression<Func<Reserva, bool>> filter)
+        public async Task<OperationResult> Save(SaveReservaDTO dto)
         {
-            throw new NotImplementedException();
+            OperationResult result = new();
+            try
+            {
+                result.Data = await _Repository.SaveEntityAsync(new Reserva()
+                {
+                    IdCliente = dto.IdCliente,
+                    IdHabitacion = dto.IdHabitacion,
+                    FechaEntrada = dto.FechaEntrada,
+                    FechaSalida = dto.FechaSalida,
+                    PrecioInicial = dto.PrecioInicial,
+                    Adelanto = dto.Adelanto,
+                    Observacion = dto.Observacion,
+                    NumeroHuespedes = dto.NumeroHuespedes
+                });
+                result.Message = "reserva guardada";
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+            }
+            return result;
         }
 
-        public Task<Reserva> GetEntityByIdAsync(int id)
+        public async Task<OperationResult> Update(UpdateReservaDTO dto)
         {
-            throw new NotImplementedException();
-        }
+            OperationResult result = new();
+            try
+            {
+                var entity = await _Repository.GetEntityByIdAsync(dto.IdReserva);
 
-        public Task<OperationResult> RealizarReservaAsync(Reserva reserva)
-        {
-            throw new NotImplementedException();
-        }
+                if (entity == null)
+                {
+                    result.Success = false;
+                    result.Message = "Reserva no encontrada.";
+                    return result;
+                }
 
-        public Task<OperationResult> SaveEntityAsync(Reserva entity)
-        {
-            throw new NotImplementedException();
-        }
+                entity.FechaSalidaConfirmacion = dto.FechaSalidaConfirmacion;
+                entity.PrecioRestante = dto.PrecioRestante;
+                entity.TotalPagado = dto.TotalPagado;
+                entity.CostoPenalidad = dto.CostoPenalidad;
+                entity.Estado = dto.Estado;
+                entity.IdCliente = dto.IdCliente;
+                entity.IdHabitacion = dto.IdHabitacion;
+                entity.FechaEntrada = dto.FechaEntrada;
+                entity.FechaSalida = dto.FechaSalida;
+                entity.PrecioInicial = dto.PrecioInicial;
+                entity.Adelanto = dto.Adelanto;
+                entity.Observacion = dto.Observacion;
+                entity.NumeroHuespedes = dto.NumeroHuespedes;
 
-        public Task<OperationResult> UpdateEntityAsync(Reserva entity)
-        {
-            throw new NotImplementedException();
+                var updateResult = await _Repository.UpdateEntityAsync(entity);
+
+                if (updateResult.Success)
+                {
+                    result.Success = true;
+                    result.Message = "Reserva actualizada exitosamente.";
+                    result.Data = entity;
+                }
+                else
+                {
+                    result.Success = false;
+                    result.Message = "Error al actualizar la reserva.";
+                }
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = $"Error: {ex.Message}";
+            }
+
+            return result;
         }
     }
 }

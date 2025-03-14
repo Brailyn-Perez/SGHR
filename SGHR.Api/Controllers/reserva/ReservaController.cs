@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.DTos.reserva.Reserva;
+using SGHR.Application.Interfaces.reserva;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.reserva;
 using System.Collections.Generic;
@@ -10,9 +12,9 @@ namespace SGHR.Api.Controllers.reserva
     [ApiController]
     public class ReservaController : ControllerBase
     {
-        private readonly IReservaRepository _repository;
+        private readonly IReservaService _repository;
 
-        public ReservaController(IReservaRepository repository)
+        public ReservaController(IReservaService repository)
         {
             _repository = repository;
         }
@@ -20,14 +22,14 @@ namespace SGHR.Api.Controllers.reserva
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reserva>>> Get()
         {
-            var reservas = await _repository.GetAllAsync();
+            var reservas = await _repository.GeAll();
             return Ok(reservas);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Reserva>> Get(int id)
         {
-            var reserva = await _repository.GetEntityByIdAsync(id);
+            var reserva = await _repository.GeById(id);
             if (reserva == null)
             {
                 return NotFound();
@@ -36,25 +38,25 @@ namespace SGHR.Api.Controllers.reserva
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] Reserva reserva)
+        public async Task<ActionResult> Post([FromBody] SaveReservaDTO reserva)
         {
-            var result = await _repository.RealizarReservaAsync(reserva);
+            var result = await _repository.Save(reserva);
             if (!result.Success)
             {
                 return BadRequest(result.Message);
             }
-            return CreatedAtAction(nameof(Get), new { id = reserva.IdReserva }, reserva);
+            return CreatedAtAction(nameof(Get), reserva);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Reserva reserva)
+        public async Task<ActionResult> Put(int id, [FromBody] UpdateReservaDTO reserva)
         {
             if (id != reserva.IdReserva)
             {
                 return BadRequest();
             }
 
-            var result = await _repository.UpdateEntityAsync(reserva);
+            var result = await _repository.Update(reserva);
             if (!result.Success)
             {
                 return BadRequest(result.Message);
@@ -65,7 +67,8 @@ namespace SGHR.Api.Controllers.reserva
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var result = await _repository.CancelarReservaAsync(id);
+            var entity = await _repository.GeById(id);
+            var result = await _repository.Remove(entity.Data);
             if (!result.Success)
             {
                 return BadRequest(result.Message);

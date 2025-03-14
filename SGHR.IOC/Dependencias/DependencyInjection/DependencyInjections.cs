@@ -16,7 +16,7 @@ namespace SGHR.IOC.DependencyInjection
         public static IServiceCollection AddAplicationServices(this IServiceCollection services)
         {
             #region Inyeccion de dependencia habitacion
-            services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+            services.AddScoped<IReservaRespository, CategoriaRepository>();
             services.AddScoped<IEstadoHabitacionRepository, EstadoHabitacionRepository>();
             services.AddScoped<IHabitacionRepository, HabitacionRepository>();
             services.AddScoped<IPisoRepository, PisoRepository>();

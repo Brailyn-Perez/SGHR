@@ -9,6 +9,6 @@ namespace SGHR.Application.DTos.reserva.Reserva
         public decimal PrecioRestante { get; set; }
         public decimal TotalPagado { get; set; }
         public decimal CostoPenalidad { get; set; }
-        public bool? Estado { get; set; }
+        public bool Estado { get; set; }
     }
 }

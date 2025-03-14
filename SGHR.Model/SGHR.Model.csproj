@@ -10,4 +10,8 @@
     <ProjectReference Include="..\SGHR.Domain\SGHR.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Model\reserva\" />
+  </ItemGroup>
+
 </Project>
