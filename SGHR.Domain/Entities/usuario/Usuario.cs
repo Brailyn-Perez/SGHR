@@ -13,10 +13,12 @@ namespace SGHR.Domain.Entities.usuario
 
         [Required]
         [StringLength(50)]
+        [RegularExpression("^[a-zA-Z]+$")]
         public string NombreCompleto { get; set; }
 
         [Required]
         [StringLength(100)]
+        [EmailAddress]
         public string Correo { get; set; }
 
         [ForeignKey("RolUsuario")]

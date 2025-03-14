@@ -1,4 +1,5 @@
 ﻿
+using MedicalAppointment.Persistence.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -73,7 +74,68 @@ namespace SGHR.Persistence.Repositories.usuario
 
             return result;
         }
+        public override async Task<OperationResult> SaveEntityAsync(Cliente entity)
+        {
+            OperationResult result = new OperationResult();
 
+            try
+            {
+                return await base.SaveEntityAsync(entity);
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:SaveEntityAsync"];
+                _logger.LogError(ex.Message, result.Message);
+
+            }
+            result.Success = true;
+            return result;
+        }
+        public override async Task<Cliente> GetEntityByIdAsync(int id)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<Cliente>.ValidateID(id);
+                if (!validator.Success) 
+                {
+                    throw new Exception("El ID es invalido");
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:GetEntityByIdAsync"];
+                _logger.LogError(ex.Message, result.Message);
+            }
+            return await base.GetEntityByIdAsync(id);
+        }
+        public override async Task<OperationResult> UpdateEntityAsync(Cliente entity)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await base.ExistsAsync(x => x.IdCliente == entity.IdCliente);
+                if (!validator)
+                {
+                    result.Message = "El cliente no existe";
+                    result.Success = false;
+                }
+                else
+                {
+                    return await base.UpdateEntityAsync(entity);
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorClienteRepository:UpdateEntityAsync"];
+                _logger.LogError(ex.Message, result.Message);
+
+            }
+            return result;
+        }
         public async override Task<List<Cliente>> GetAllAsync() 
         {
             return await _context.Clientes.Where(cd => cd.Borrado == false).ToListAsync();

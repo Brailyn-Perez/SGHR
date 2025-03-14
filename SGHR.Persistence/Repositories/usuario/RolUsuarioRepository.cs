@@ -1,7 +1,9 @@
 ﻿
+using MedicalAppointment.Persistence.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using SGHR.Domain.Base;
 using SGHR.Domain.Entities.usuario;
 using SGHR.Model.Model.usuario;
@@ -9,6 +11,8 @@ using SGHR.Persistence.Base;
 using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
 using SGHR.Persistence.Repositories.habitacion;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace SGHR.Persistence.Repositories.usuario
 {
@@ -57,14 +61,78 @@ namespace SGHR.Persistence.Repositories.usuario
             }
             catch (Exception ex) 
             {
-                result.Message = this._configuration["ErrorRolUsuarioRepository:GetRolUsuarioByUsuario"];
+                result.Message = _configuration["ErrorRolUsuarioRepository:GetRolUsuarioByUsuario"];
                 result.Success = false;
-                this._logger.LogError(result.Message, ex.ToString());
+                _logger.LogError(result.Message, ex.ToString());
             }
 
             return result;
         }
+
+        public override async Task<OperationResult> SaveEntityAsync(RolUsuario entity)
+        {
+            OperationResult result = new OperationResult();
+            try 
+            {
+                return await base.SaveEntityAsync(entity);
+            }
+            catch (Exception ex) 
+            {
+                result.Message = _configuration["ErrorRolUsuarioRepository:SaveEntityAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            result.Success = true;
+            return result;
+        }
+        public override async Task<RolUsuario> GetEntityByIdAsync(int id)
+        {
+            OperationResult result = new OperationResult();
+            try
+            {
+                var validator = await BaseValidator<RolUsuario>.ValidateID(id);
+                if (!validator.Success) 
+                {
+                    throw new Exception("El Id es invalido");
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Message = _configuration["ErrorRolUsuarioRepository:GetEntityByIdAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return await base.GetEntityByIdAsync(id);
+        }
+        public override async Task<OperationResult> UpdateEntityAsync(RolUsuario entity)
+        {
+            OperationResult result = new OperationResult();
+
+            try 
+            {
+                var validator = await base.ExistsAsync(x => x.IdRolUsuario == entity.IdRolUsuario);
+                if (!validator)
+                {
+                    result.Message = "El Rol no existe";
+                    result.Success = false;
+                }
+                else
+                {
+                    return await base.UpdateEntityAsync(entity);
+                }
+            }
+            catch (Exception ex) 
+            {
+                result.Message = _configuration["ErrorRolUsuarioRepository:UpdateEntityAsync"];
+                result.Success = false;
+                _logger.LogError(result.Message, ex.ToString());
+            }
+            return result;
+        }
+        public override async Task<List<RolUsuario>> GetAllAsync()
+        {
+            return await _context.RolUsuarios.Where(cd => cd.Borrado == false).ToListAsync();
+        }
+
     }
-
-
 }
