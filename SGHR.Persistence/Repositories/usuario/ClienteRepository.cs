@@ -80,12 +80,7 @@ namespace SGHR.Persistence.Repositories.usuario
 
             try
             {
-                var Validator = await BaseValidator<Cliente>.ValidateEntityAsync(entity);
-
-                if (!Validator.Success) 
-                {
-                    return Validator;
-                }
+                return await base.SaveEntityAsync(entity);
             }
             catch (Exception ex) 
             {
@@ -94,6 +89,7 @@ namespace SGHR.Persistence.Repositories.usuario
                 _logger.LogError(ex.Message, result.Message);
 
             }
+            result.Success = true;
             return result;
         }
         public override async Task<Cliente> GetEntityByIdAsync(int id)
@@ -120,10 +116,15 @@ namespace SGHR.Persistence.Repositories.usuario
             OperationResult result = new OperationResult();
             try
             {
-                var validator = await BaseValidator<Cliente>.ValidateEntityAsync(entity);
-                if (!validator.Success) 
+                var validator = await base.ExistsAsync(x => x.IdCliente == entity.IdCliente);
+                if (!validator)
                 {
-                    return validator;
+                    result.Message = "El cliente no existe";
+                    result.Success = false;
+                }
+                else
+                {
+                    return await base.UpdateEntityAsync(entity);
                 }
             }
             catch (Exception ex) 

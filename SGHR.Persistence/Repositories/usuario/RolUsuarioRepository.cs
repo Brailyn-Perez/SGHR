@@ -12,6 +12,7 @@ using SGHR.Persistence.Context;
 using SGHR.Persistence.Interfaces.usuario;
 using SGHR.Persistence.Repositories.habitacion;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace SGHR.Persistence.Repositories.usuario
 {
@@ -73,11 +74,7 @@ namespace SGHR.Persistence.Repositories.usuario
             OperationResult result = new OperationResult();
             try 
             {
-                var validator = await BaseValidator<RolUsuario>.ValidateEntityAsync(entity);
-                if (!validator.Success) 
-                {
-                    return validator;
-                }
+                return await base.SaveEntityAsync(entity);
             }
             catch (Exception ex) 
             {
@@ -85,6 +82,7 @@ namespace SGHR.Persistence.Repositories.usuario
                 result.Success = false;
                 _logger.LogError(result.Message, ex.ToString());
             }
+            result.Success = true;
             return result;
         }
         public override async Task<RolUsuario> GetEntityByIdAsync(int id)
@@ -112,10 +110,15 @@ namespace SGHR.Persistence.Repositories.usuario
 
             try 
             {
-                var validator = await BaseValidator<RolUsuario>.ValidateEntityAsync(entity);
-                if (!validator.Success) 
+                var validator = await base.ExistsAsync(x => x.IdRolUsuario == entity.IdRolUsuario);
+                if (!validator)
                 {
-                    return validator;
+                    result.Message = "El Rol no existe";
+                    result.Success = false;
+                }
+                else
+                {
+                    return await base.UpdateEntityAsync(entity);
                 }
             }
             catch (Exception ex) 
