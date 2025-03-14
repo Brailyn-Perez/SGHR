@@ -49,7 +49,7 @@ namespace SGHR.Domain.Entities.reserva
         [Required]
         public int NumeroHuespedes { get; set; }
 
-        public bool? Estado { get; set; }
+        public bool Estado { get; set; }
 
         public Cliente Cliente { get; set; }
 

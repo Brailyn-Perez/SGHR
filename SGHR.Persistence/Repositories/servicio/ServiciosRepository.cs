@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MedicalAppointment.Persistence.Base;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Domain.Base;
@@ -27,13 +28,6 @@ namespace SGHR.Persistence.Repositories.servicio
             var result = new OperationResult();
 
             var categoria = await _context.Categorias.FindAsync(idCategoria);
-            if (categoria == null)
-            {
-                result.Success = false;
-                result.Message = "Categoría no encontrada.";
-                return result;
-            }
-
             var servicio = await GetEntityByIdAsync(idServicio);
             if (servicio == null)
             {
@@ -41,18 +35,16 @@ namespace SGHR.Persistence.Repositories.servicio
                 result.Message = "Servicio no encontrado.";
                 return result;
             }
-
             if (categoria.Estado == true)
             {
                 result.Success = false;
                 result.Message = "No se puede asociar un servicio a una categoría inactiva.";
                 return result;
             }
-
-            categoria.IdServicio = idServicio;
-
             try
             {
+                await BaseValidator<Servicios>.ValidateEntityAsync(servicio);
+                await BaseValidator<Servicios>.ValidateEntityAsync(idServicio);
                 _context.Categorias.Update(categoria);
                 await _context.SaveChangesAsync();
                 result.Success = true;
@@ -61,10 +53,9 @@ namespace SGHR.Persistence.Repositories.servicio
             catch (Exception ex)
             {
                 result.Success = false;
-                result.Message = "Error al asociar el servicio a la categoría.";
+                result.Message = _configuration["ErrorAlAsociarElServicioAlaCategoria"];
                 _logger.LogError(ex, "Error al asociar el servicio a la categoría.");
             }
-
             return result;
         }
 
@@ -82,5 +73,9 @@ namespace SGHR.Persistence.Repositories.servicio
                 .ToListAsync();
         }
 
+        public override async Task<List<Servicios>> GetAllAsync()
+        {
+            return await _context.Servicios.Where(s => s.Borrado == false).ToListAsync();
+        }
     }
 }

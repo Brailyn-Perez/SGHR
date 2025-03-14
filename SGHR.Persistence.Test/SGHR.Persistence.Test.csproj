@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SGHR.Persistence\SGHR.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
