@@ -28,9 +28,14 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var estados = await _repository.GetAllAsync(x => x.Borrado == false);
+                var estados = await _repository.GetAllAsync();
                 result.Success = true;
-                result.Data = estados;
+                result.Data = estados.Select(x => new EstadoHabitacionDTO()
+                {
+                    IdEstadoHabitacion = x.IdEstadoHabitacion,
+                    Descripcion = x.Descripcion,
+                    Estado = x.Estado
+                });
             }
             catch (Exception ex)
             {
@@ -54,7 +59,12 @@ namespace SGHR.Application.Service.habitacion
                     return result;
                 }
                 result.Success = true;
-                result.Data = estado;
+                result.Data = new EstadoHabitacionDTO()
+                {
+                    IdEstadoHabitacion = estado.IdEstadoHabitacion,
+                    Descripcion = estado.Descripcion,
+                    Estado = estado.Estado
+                };
             }
             catch (Exception ex)
             {

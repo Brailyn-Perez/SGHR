@@ -28,9 +28,18 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var tarifas = await _repository.GetAllAsync(x => !x.Borrado);
+                var tarifas = await _repository.GetAllAsync();
                 result.Success = true;
-                result.Data = tarifas;
+                result.Data = tarifas.Select(x => new TarifaDTO()
+                {
+                    IdTarifa = x.IdTarifa,
+                    FechaInicio = x.FechaInicio,
+                    FechaFin = x.FechaFin,
+                    PrecioPorNoche = x.PrecioPorNoche,
+                    Descuento = x.Descuento,
+                    Descripcion = x.Descripcion,
+                    Estado = x.Estado
+                });
             }
             catch (Exception ex)
             {
@@ -54,7 +63,16 @@ namespace SGHR.Application.Service.habitacion
                     return result;
                 }
                 result.Success = true;
-                result.Data = tarifa;
+                result.Data = new TarifaDTO()
+                {
+                    IdTarifa = tarifa.IdTarifa,
+                    FechaInicio = tarifa.FechaInicio,
+                    FechaFin = tarifa.FechaFin,
+                    PrecioPorNoche = tarifa.PrecioPorNoche,
+                    Descuento = tarifa.Descuento,
+                    Descripcion = tarifa.Descripcion,
+                    Estado = tarifa.Estado
+                };
             }
             catch (Exception ex)
             {

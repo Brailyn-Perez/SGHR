@@ -28,9 +28,16 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var habitaciones = await _repository.GetAllAsync(x => x.Borrado == false);
+                var habitaciones = await _repository.GetAllAsync();
                 result.Success = true;
-                result.Data = habitaciones;
+                result.Data = habitaciones.Select(x => new HabitacionDTO()
+                {
+                    IdHabitacion = x.IdHabitacion,
+                    Numero = x.Numero,
+                    Detalle = x.Detalle,
+                    Precio = x.Precio,
+                    Estado = x.Estado,
+                });
             }
             catch (Exception ex)
             {
@@ -54,7 +61,14 @@ namespace SGHR.Application.Service.habitacion
                     return result;
                 }
                 result.Success = true;
-                result.Data = habitacion;
+                result.Data = new HabitacionDTO() 
+                {
+                    IdHabitacion = habitacion.IdHabitacion,
+                    Numero = habitacion.Numero,
+                    Detalle = habitacion.Detalle,
+                    Precio = habitacion.Precio,
+                    Estado = habitacion.Estado,
+                };
             }
             catch (Exception ex)
             {
