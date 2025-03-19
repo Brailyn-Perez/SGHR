@@ -1,45 +1,66 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SGHR.Persistence.Interfaces.habitacion;
-
-
+using SGHR.Application.DTos.habitacion.Categoria;
+using SGHR.Application.Interfaces.habitacion;
 namespace SGHR.Api.Controllers.habitacion
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
     {
-        private readonly ICategoriaRepository _repository;
+        private readonly ICategoriaService _service;
 
-        public CategoriaController(ICategoriaRepository repository)
+        public CategoriaController(ICategoriaService Service)
         {
-            _repository = repository;
+            _service = Service;
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _service.GeAll();
+            return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _service.GeById(id);
+            return Ok(result);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post(SaveCategoriaDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _service.Save(dto);
+            return Ok(result);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put(UpdateCategoriaDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _service.Update(dto);
+            return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(RemoveCategoriaDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _service.Remove(dto);
+            return Ok(result);
         }
     }
 }

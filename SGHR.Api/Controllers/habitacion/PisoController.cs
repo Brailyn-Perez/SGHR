@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SGHR.Domain.Entities.habitacion;
-using SGHR.Persistence.Interfaces.habitacion;
+using SGHR.Application.DTos.habitacion.Piso;
+using SGHR.Application.Interfaces.habitacion;
 
 
 namespace SGHR.Api.Controllers.habitacion
@@ -9,57 +9,60 @@ namespace SGHR.Api.Controllers.habitacion
     [ApiController]
     public class PisoController : ControllerBase
     {
-        private readonly IPisoRepository _repository;
+        private readonly IPisoService _service;
 
-        public PisoController(IPisoRepository repository)
+        public PisoController(IPisoService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var value = await _repository.GetAllAsync(x => x.Borrado == false);
-            return StatusCode(StatusCodes.Status200OK, new { value });
+            var result = await _service.GeAll();
+            return Ok(result);
         }
 
-        
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var value = await _repository.GetEntityByIdAsync(id);
-
-            return StatusCode(StatusCodes.Status200OK , new {value});
+            var result = await _service.GeById(id);
+            return Ok(result);
         }
 
-        
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Piso piso)
+        public async Task<IActionResult> Post(SavePisoDTO piso)
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest();
             }
-
-            var response = await _repository.SaveEntityAsync(piso);
-            return StatusCode(StatusCodes.Status200OK, new {piso});
+            var result = await _service.Save(piso);
+            return Ok(result);
         }
 
-        
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Piso piso)
+        [HttpPut]
+        public async Task<IActionResult> Put(UpdatePisoDTO piso)
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest();
+            }
+            var result = await _service.Update(piso);
+            return Ok(result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(RemovePisoDTO dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
             }
 
-            piso.IdPiso = id;
-            piso.FechaActualizacion = DateTime.Now;
-            piso.UsuarioActualizacion = 1;
-
-            var response = await _repository.UpdateEntityAsync(piso);
-            return StatusCode(StatusCodes.Status200OK, new { piso });
+            var result = await _service.Remove(dto);
+            return Ok(result);
         }
+
     }
 }

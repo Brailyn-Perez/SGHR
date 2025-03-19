@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.DTos.habitacion.EstadoHabitacion;
+using SGHR.Application.Interfaces.habitacion;
 using SGHR.Domain.Entities.habitacion;
 using SGHR.Persistence.Interfaces.habitacion;
 
@@ -9,57 +11,55 @@ namespace SGHR.Api.Controllers.habitacion
     [ApiController]
     public class EstadoHabitacionController : ControllerBase
     {
-        private readonly IEstadoHabitacionRepository _repository;
+        private readonly IEstadoHabitacionService _service;
 
-        public EstadoHabitacionController(IEstadoHabitacionRepository repository)
+        public EstadoHabitacionController(IEstadoHabitacionService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var value = await _repository.GetAllAsync(x => x.Borrado == false);
-            return StatusCode(StatusCodes.Status200OK, new { value });
+            var result = await _service.GeAll();
+            return Ok(result);
         }
-
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var value = await _repository.GetEntityByIdAsync(id);
-
-            return StatusCode(StatusCodes.Status200OK, new { value });
+            var result = await _service.GeById(id);
+            return Ok(result);
         }
-
-
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] EstadoHabitacion estadoHabitacion)
+        public async Task<IActionResult> Post(SaveEstadoHabitacionDTO estadoHabitacion)
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest(ModelState);
             }
-
-            var response = await _repository.SaveEntityAsync(estadoHabitacion);
-            return StatusCode(StatusCodes.Status200OK, new { estadoHabitacion });
+            var result = await _service.Save(estadoHabitacion);
+            return Ok(result);
         }
-
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] EstadoHabitacion estadoHabitacion)
+        [HttpPut]
+        public async Task<IActionResult> Put(UpdateEstadoHabitacionDTO estadoHabitacion)
         {
             if (!ModelState.IsValid)
             {
-                return StatusCode(StatusCodes.Status400BadRequest);
+                return BadRequest(ModelState);
             }
-
-            estadoHabitacion.IdEstadoHabitacion = id;
-            estadoHabitacion.FechaActualizacion = DateTime.Now;
-            estadoHabitacion.UsuarioActualizacion = 1;
-
-            var response = await _repository.UpdateEntityAsync(estadoHabitacion);
-            return StatusCode(StatusCodes.Status200OK, new { estadoHabitacion });
+            var result = await _service.Update(estadoHabitacion);
+            return Ok(result);
         }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(RemoveEstadoHabitacionDTO estadoHabitacion)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _service.Remove(estadoHabitacion);
+            return Ok(result);
+        }
+
     }
 }

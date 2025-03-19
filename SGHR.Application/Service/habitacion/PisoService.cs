@@ -28,9 +28,14 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var pisos = await _repository.GetAllAsync(x => !x.Borrado);
+                var pisos = await _repository.GetAllAsync();
                 result.Success = true;
-                result.Data = pisos;
+                result.Data = pisos.Select(x => new PisoDTO()
+                {
+                    IdPiso = x.IdPiso,
+                    Descripcion = x.Descripcion,
+                    Estado = x.Estado
+                });
             }
             catch (Exception ex)
             {
@@ -54,7 +59,12 @@ namespace SGHR.Application.Service.habitacion
                     return result;
                 }
                 result.Success = true;
-                result.Data = piso;
+                result.Data = new PisoDTO()
+                {
+                    IdPiso = piso.IdPiso,
+                    Descripcion = piso.Descripcion,
+                    Estado = piso.Estado
+                };
             }
             catch (Exception ex)
             {
