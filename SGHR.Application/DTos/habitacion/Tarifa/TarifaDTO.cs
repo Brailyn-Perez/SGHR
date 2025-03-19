@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
-namespace SGHR.Application.DTos.habitacion.Tarifa
+﻿namespace SGHR.Application.DTos.habitacion.Tarifa
 {
     public class TarifaDTO
     {

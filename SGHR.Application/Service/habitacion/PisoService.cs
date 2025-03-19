@@ -1,5 +1,4 @@
-﻿
-using MedicalAppointment.Persistence.Base;
+﻿using MedicalAppointment.Persistence.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Application.DTos.habitacion.Piso;
