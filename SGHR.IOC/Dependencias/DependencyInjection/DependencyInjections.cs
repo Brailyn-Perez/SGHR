@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SGHR.Application.Interfaces.habitacion;
+using SGHR.Application.Interfaces.sevicio;
 using SGHR.Application.Service.habitacion;
 using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;

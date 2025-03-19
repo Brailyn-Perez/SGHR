@@ -123,7 +123,21 @@ namespace SGHR.Application.Service.habitacion
             {
                 var category = new Categoria
                 {
+                    FechaCreacion = DateTime.UtcNow,
+                    UsuarioCreacion = dto.ChangeUser,
+                    IdServicio = dto.IdServicio,
+                    Descripcion = dto.Descripcion,
+                    Estado = dto.Estado
                 };
+
+                var servicio = await _repository.ServicioExiste(dto.IdServicio);
+
+                if (!servicio)
+                {
+                    result.Success = false;
+                    result.Message = "El servicio no existe";
+                    return result;
+                }
 
                 var isValid = await BaseValidator<Categoria>.ValidateEntityAsync(category);
                 if (!isValid.Success)

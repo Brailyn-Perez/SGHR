@@ -30,7 +30,7 @@ namespace SGHR.Persistence.Repositories.habitacion
             OperationResult result = new();
             try
             {
-                    return await base.SaveEntityAsync(entity);
+                return await base.SaveEntityAsync(entity);
             }
             catch (Exception ex)
             {
@@ -83,7 +83,7 @@ namespace SGHR.Persistence.Repositories.habitacion
             OperationResult result = new();
             try
             {
-               var isValid = await BaseValidator<Categoria>.ValidateID(Id);
+                var isValid = await BaseValidator<Categoria>.ValidateID(Id);
                 if (!isValid.Success)
                     return isValid;
 
@@ -107,6 +107,11 @@ namespace SGHR.Persistence.Repositories.habitacion
                 _logger.LogError(result.Message, ex);
             }
             return result;
+        }
+
+        public async Task<bool> ServicioExiste(int Id)
+        {
+            return await _context.Servicios.AnyAsync(x => x.IdServicio == Id);
         }
     }
 }
