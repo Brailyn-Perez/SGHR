@@ -1,11 +1,9 @@
-﻿
-using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.EstadoHabitacion
 {
-    public class RemoveEstadoHabitacionDTO : DToBases
+    public class RemoveEstadoHabitacionDTO
     {
         [Required]
         [NotNull]

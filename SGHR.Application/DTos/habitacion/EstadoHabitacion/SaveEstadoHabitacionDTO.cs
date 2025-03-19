@@ -1,10 +1,9 @@
-﻿using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.EstadoHabitacion
 {
-    public class SaveEstadoHabitacionDTO : DToBases
+    public class SaveEstadoHabitacionDTO
     {
         [Required]
         [StringLength(50)]
