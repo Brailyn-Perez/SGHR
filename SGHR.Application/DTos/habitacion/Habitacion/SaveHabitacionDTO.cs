@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using SGHR.Application.DTos.DToBase;
 
 namespace SGHR.Application.DTos.habitacion.Habitacion
 {
-    public class SaveHabitacionDTO : DToBases
+    public class SaveHabitacionDTO
     {
         [Required]
         [StringLength(50)]
