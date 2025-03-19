@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SGHR.Persistence.Interfaces.habitacion;
-
+using SGHR.Application.DTos.habitacion.Tarifa;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Api.Controllers.habitacion
 {
@@ -8,38 +8,54 @@ namespace SGHR.Api.Controllers.habitacion
     [ApiController]
     public class TarifaController : ControllerBase
     {
-        private readonly ITarifaRepository _repository;
+        private readonly ITarifaService _service;
 
-        public TarifaController(ITarifaRepository repository)
+        public TarifaController(ITarifaService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = await _service.GeAll();
+            return Ok(result);
         }
-
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var result = await _service.GeById(id);
+            return Ok(result);
         }
-
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post(SaveTarifaDTO tarifa)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _service.Save(tarifa);
+            return Ok(result);
         }
-
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put(UpdateTarifaDTO tarifa)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _service.Update(tarifa);
+            return Ok(result);
         }
-
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(RemoveTarifaDTO dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var result = await _service.Remove(dto);
+            return Ok(result);
         }
     }
 }

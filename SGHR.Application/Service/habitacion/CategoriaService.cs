@@ -27,9 +27,14 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var categories = await _repository.GetAllAsync(x => x.Borrado == false);
+                var categories = await _repository.GetAllAsync();
                 result.Success = true;
-                result.Data = categories;
+                result.Data = categories.Select(x => new CategoriaDTO
+                {
+                    IdCategoria = x.IdCategoria,
+                    Descripcion = x.Descripcion,
+                    Estado = x.Estado
+                });
             }
             catch (Exception ex)
             {
@@ -55,7 +60,13 @@ namespace SGHR.Application.Service.habitacion
                 }
 
                 result.Success = true;
-                result.Data = category;
+                result.Data = new CategoriaDTO()
+                {
+                    IdCategoria = category.IdCategoria,
+                    Descripcion = category.Descripcion,
+                    Estado = category.Estado
+
+                };
             }
             catch (Exception ex)
             {

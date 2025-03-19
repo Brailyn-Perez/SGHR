@@ -4,6 +4,7 @@ using SGHR.Domain.Entities.habitacion;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Domain.Entities.servicio;
 using SGHR.Domain.Entities.usuario;
+using SGHR.Persistence.Context.Seeds.Habitacion;
 
 namespace SGHR.Persistence.Context
 {
@@ -119,6 +120,13 @@ namespace SGHR.Persistence.Context
             modelBuilder.Entity<Usuario>()
                 .Property(u => u.FechaCreacion)
                 .HasDefaultValueSql("getdate()");
+
+            modelBuilder.ApplyConfiguration(new HabitacionSeed());
+            modelBuilder.ApplyConfiguration(new PisoSeed());
+            modelBuilder.ApplyConfiguration(new CategoriaSeed());
+            modelBuilder.ApplyConfiguration(new EstadoHabitacionSeed());
+            modelBuilder.ApplyConfiguration(new TarifaSeed());
+
         }
     }
 }
