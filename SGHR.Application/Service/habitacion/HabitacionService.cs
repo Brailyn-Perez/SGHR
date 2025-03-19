@@ -1,5 +1,4 @@
-﻿
-using MedicalAppointment.Persistence.Base;
+﻿using MedicalAppointment.Persistence.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Application.DTos.habitacion.Habitacion;
@@ -115,6 +114,11 @@ namespace SGHR.Application.Service.habitacion
                 var habitacion = new Habitacion
                 {
                     Numero = dto.Numero,
+                    Detalle = dto.Detalle,
+                    Precio = dto.Precio,
+                    Estado = dto.Estado,
+                    FechaCreacion = DateTime.UtcNow,
+                    UsuarioCreacion = 0,
                 };
 
                 var isValid = await BaseValidator<Habitacion>.ValidateEntityAsync(habitacion);
@@ -155,6 +159,13 @@ namespace SGHR.Application.Service.habitacion
                 {
                     return isValid;
                 }
+
+                habitacion.Detalle = dto.Detalle;
+                habitacion.Precio = dto.Precio;
+                habitacion.Estado = dto.Estado;
+                habitacion.Numero = dto.Numero;
+                habitacion.FechaActualizacion = DateTime.UtcNow;
+                habitacion.UsuarioActualizacion = 0;
 
                 await _repository.UpdateEntityAsync(habitacion);
                 result.Success = true;

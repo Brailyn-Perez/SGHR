@@ -1,10 +1,9 @@
-﻿using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.Tarifa
 {
-    public class SaveTarifaDTO : DToBases
+    public class SaveTarifaDTO
     {
         [Required]
         [Range(1, int.MaxValue)]

@@ -1,5 +1,4 @@
-﻿
-using MedicalAppointment.Persistence.Base;
+﻿using MedicalAppointment.Persistence.Base;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Application.DTos.habitacion.Piso;
@@ -106,7 +105,14 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var piso = new Piso { };
+                var piso = new Piso
+                {
+                    Descripcion = dto.Descripcion,
+                    Estado = dto.Estado,
+                    FechaCreacion = DateTime.UtcNow,
+                    UsuarioCreacion = 0
+                };
+
                 var isValid = await BaseValidator<Piso>.ValidateEntityAsync(piso);
                 if (!isValid.Success)
                 {
@@ -136,6 +142,12 @@ namespace SGHR.Application.Service.habitacion
                     result.Message = _configuration["PisoNotFound"];
                     return result;
                 }
+
+                piso.Descripcion = dto.Descripcion;
+                piso.Estado = dto.Estado;
+                piso.UsuarioActualizacion =0;
+                piso.FechaActualizacion = DateTime.UtcNow;
+
                 var isValid = await BaseValidator<Piso>.ValidateEntityAsync(piso);
                 if (!isValid.Success)
                 {

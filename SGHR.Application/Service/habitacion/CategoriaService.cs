@@ -102,6 +102,8 @@ namespace SGHR.Application.Service.habitacion
                     
                 category.Borrado = true;
                 category.FechaEliminado = DateTime.UtcNow;
+                category.UsuarioEliminacion = 0;
+                category.Estado = false;
 
                 await _repository.UpdateEntityAsync(category);
                 result.Success = true;
@@ -124,10 +126,10 @@ namespace SGHR.Application.Service.habitacion
                 var category = new Categoria
                 {
                     FechaCreacion = DateTime.UtcNow,
-                    UsuarioCreacion = dto.ChangeUser,
                     IdServicio = dto.IdServicio,
                     Descripcion = dto.Descripcion,
-                    Estado = dto.Estado
+                    Estado = dto.Estado,
+                    UsuarioCreacion = 0,
                 };
 
                 var servicio = await _repository.ServicioExiste(dto.IdServicio);
@@ -177,6 +179,13 @@ namespace SGHR.Application.Service.habitacion
                 {
                     return isValid;
                 }
+
+                category.FechaActualizacion = DateTime.UtcNow;
+                category.IdServicio = dto.IdServicio;
+                category.Descripcion = dto.Descripcion;
+                category.Estado = dto.Estado;
+                category.UsuarioActualizacion = 0;
+
 
                 await _repository.UpdateEntityAsync(category);
                 result.Success = true;

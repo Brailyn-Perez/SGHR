@@ -110,6 +110,10 @@ namespace SGHR.Application.Service.habitacion
             {
                 var estado = new EstadoHabitacion
                 {
+                    Descripcion = dto.Descripcion,
+                    Estado = dto.Estado,
+                    FechaCreacion = DateTime.UtcNow,
+                    UsuarioCreacion = 0
                 };
 
                 var isValid = await BaseValidator<EstadoHabitacion>.ValidateEntityAsync(estado);
@@ -149,6 +153,11 @@ namespace SGHR.Application.Service.habitacion
                 {
                     return isValid;
                 }
+
+                estado.Descripcion = dto.Descripcion;
+                estado.Estado = dto.Estado;
+                estado.FechaActualizacion = DateTime.UtcNow;
+                estado.UsuarioActualizacion = 0;
 
                 await _repository.UpdateEntityAsync(estado);
                 result.Success = true;

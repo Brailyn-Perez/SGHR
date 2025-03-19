@@ -1,11 +1,10 @@
-﻿using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.Habitacion
 {
-    public class UpdateHabitacionDTO :DToBases
+    public class UpdateHabitacionDTO
     {
         [Required]
         [NotNull]

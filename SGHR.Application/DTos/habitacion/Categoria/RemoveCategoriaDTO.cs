@@ -1,11 +1,9 @@
-﻿
-using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.Categoria
 {
-    public class RemoveCategoriaDTO : DToBases
+    public class RemoveCategoriaDTO
     {
         [NotNull]
         [Required]

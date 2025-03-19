@@ -1,10 +1,9 @@
-﻿using SGHR.Application.DTos.DToBase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SGHR.Application.DTos.habitacion.Categoria
 {
-    public class SaveCategoriaDTO : DToBases
+    public class SaveCategoriaDTO
     {
         [Required]
         [StringLength(50)]
