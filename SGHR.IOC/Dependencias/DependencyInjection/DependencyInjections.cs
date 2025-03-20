@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SGHR.Application.Interfaces.habitacion;
+using SGHR.Application.Interfaces.reserva;
 using SGHR.Application.Interfaces.sevicio;
-using SGHR.Application.Service.habitacion;
+using SGHR.Application.Service.reserva;
+using SGHR.Application.Service.servicio;
 using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;
 using SGHR.Persistence.Interfaces.servicio;
@@ -26,20 +27,14 @@ namespace SGHR.IOC.DependencyInjection
             services.AddScoped<ITarifaRepository, TarifaRepository>();
             #endregion
 
-            #region "Inyeccion de dependencias de habitacion Services"
-            services.AddScoped<ICategoriaService, CategoriaService>();
-            services.AddScoped<IEstadoHabitacionService, EstadoHabitacionService>();
-            services.AddScoped<IHabitacionService, HabitacionService>();
-            services.AddScoped<IPisoService, PisoService>();
-            services.AddScoped<ITarifaService, TarifaService>();
-            #endregion
-
             #region Inyeccion de dependencias de reserva
             services.AddScoped<IReservaRepository, ReservaRepository>();
+            services.AddTransient<IReservaService, Application.Service.reserva.ReservaServise>();
             #endregion
 
             #region Inyeccion de dependencias de servicio
             services.AddScoped<IServicioRepository, ServiciosRepository>();
+            services.AddTransient<IServiciosService, Application.Service.servicio.ServicioService>();
             #endregion
 
             #region Inyeccion de dependencias de usuario

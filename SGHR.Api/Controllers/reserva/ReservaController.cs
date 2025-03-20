@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SGHR.Application.DTos.reserva.Reserva;
 using SGHR.Application.Interfaces.reserva;
+using SGHR.Domain.Base;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.reserva;
 using System.Collections.Generic;
@@ -29,12 +30,16 @@ namespace SGHR.Api.Controllers.reserva
         [HttpGet("{id}")]
         public async Task<ActionResult<Reserva>> Get(int id)
         {
-            var reserva = await _repository.GeById(id);
-            if (reserva == null)
+            List<OperationResult> resultado = new();
+            OperationResult result = new();
+            result = await _repository.GeById(id);
+            if (result.Data == null)
             {
                 return NotFound();
             }
-            return Ok(reserva);
+            resultado.Add(result);
+
+            return Ok(resultado);
         }
 
         [HttpPost]
@@ -45,7 +50,9 @@ namespace SGHR.Api.Controllers.reserva
             {
                 return BadRequest(result.Message);
             }
-            return CreatedAtAction(nameof(Get), reserva);
+            List<OperationResult> resultados = new();
+            resultados.Add(result);
+            return CreatedAtAction(nameof(Get), resultados.ToList());
         }
 
         [HttpPut("{id}")]
@@ -68,7 +75,10 @@ namespace SGHR.Api.Controllers.reserva
         public async Task<ActionResult> Delete(int id)
         {
             var entity = await _repository.GeById(id);
-            var result = await _repository.Remove(entity.Data);
+            var result = await _repository.Remove(entity.Data = new RemoveReservaDTO()
+            {
+                IdReserva = entity.Data.IdReserva
+            });
             if (!result.Success)
             {
                 return BadRequest(result.Message);

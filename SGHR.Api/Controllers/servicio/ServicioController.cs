@@ -61,7 +61,7 @@ namespace SGHR.Api.Controllers.servicio
             {
                 return BadRequest(result.Message);
             }
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
@@ -73,11 +73,9 @@ namespace SGHR.Api.Controllers.servicio
                 return NotFound();
             }
 
-            var result = await _repository.Update(servicio.Data);
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
+            var result = _repository.Remove(servicio.Data = new RemoveServicioDTO(){
+                IdServicio = servicio.Data.IdServicio
+            });
             return NoContent();
         }
 

@@ -1,5 +1,4 @@
-﻿
-using SGHR.Application.Base;
+﻿using SGHR.Application.Base;
 using SGHR.Application.DTos.reserva.Reserva;
 using SGHR.Domain.Repository;
 

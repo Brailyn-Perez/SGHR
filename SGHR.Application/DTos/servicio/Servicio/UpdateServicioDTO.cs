@@ -1,6 +1,4 @@
-﻿
-
-namespace SGHR.Application.DTos.servicio.Servicio
+﻿namespace SGHR.Application.DTos.servicio.Servicio
 {
     public class UpdateServicioDTO : ServicioBaseDTO
     {

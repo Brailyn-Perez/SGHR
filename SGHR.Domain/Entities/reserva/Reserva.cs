@@ -20,8 +20,8 @@ namespace SGHR.Domain.Entities.reserva
         public int IdHabitacion { get; set; }
 
         [Required]
-        public DateTime FechaEntrada { get; set; } = DateTime.Now;
-
+        public DateTime FechaEntrada { get; set; }
+        
         [Required]
         public DateTime FechaSalida { get; set; }
 
@@ -31,6 +31,7 @@ namespace SGHR.Domain.Entities.reserva
         [Column(TypeName = "decimal(10, 2)")]
         public decimal PrecioInicial { get; set; }
 
+        [Required]
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Adelanto { get; set; }
 
