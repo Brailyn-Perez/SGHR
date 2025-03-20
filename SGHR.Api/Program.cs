@@ -1,5 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
+using SGHR.Application.Interfaces.reserva;
+using SGHR.Application.Interfaces.sevicio;
+using SGHR.Application.Service.reserva;
+using SGHR.Application.Service.servicio;
 using SGHR.IOC.DependencyInjection;
 using SGHR.Persistence.Context;
 
@@ -19,12 +23,11 @@ namespace SGHR.Api
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<SGHRContext>(options => 
-            options.UseSqlServer(builder.Configuration.GetConnectionString("LeandroConnection")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("BorromeConnection")));
 
 
             // aqui es donde se inyectan todas las dependencias necesarias
             builder.Services.AddAplicationServices();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

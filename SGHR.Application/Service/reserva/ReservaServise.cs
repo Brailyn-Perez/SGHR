@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SGHR.Application.DTos.reserva.Reserva;
 using SGHR.Application.Interfaces.reserva;
@@ -9,17 +8,18 @@ using SGHR.Domain.Base;
 using SGHR.Domain.Entities.reserva;
 using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;
+using SGHR.Persistence.Repositories.servicio;
 using System.Linq.Expressions;
 
 namespace SGHR.Application.Service.reserva
 {
-    public class RerervaServise : IReservaService
+    public class ReservaServise : IReservaService
     {
         private readonly IReservaRepository _Repository;
         private readonly IConfiguration _configuration;
-        private readonly ILogger<ServiciosRespository> _logger;
+        private readonly ILogger<IReservaService> _logger;
 
-        public RerervaServise(IReservaRepository repository, IConfiguration configuration, ILogger<ServiciosRespository> logger)
+        public ReservaServise(IReservaRepository repository, IConfiguration configuration, ILogger<IReservaService> logger)
         {
             _Repository = repository;
             _configuration = configuration;
@@ -29,14 +29,32 @@ namespace SGHR.Application.Service.reserva
         public async Task<OperationResult> GeAll()
         {
             OperationResult result = new();
-            result.Data = await _Repository.GetAllAsync();
+            try
+            {
+                result.Data = await _Repository.GetAllAsync();
+                result.Message = _configuration["TodoOk:getAllAsync"];
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["Error:getAllAsync"];
+            }
             return result;
         }
+
 
         public async Task<OperationResult> GeById(int id)
         {
             OperationResult result = new();
-            result.Data = await _Repository.GetEntityByIdAsync(id);
+            try{
+                result.Data = await _Repository.GetEntityByIdAsync(id);
+                result.Message = "Entidad obtenida Correctamente";
+            }
+            catch(Exception ex)
+            {
+                result.Success = false;
+                result.Message = _configuration["ErrorAlObtenerLaEntidad:GeById"];
+            }
             return result;
         }
 
@@ -54,7 +72,8 @@ namespace SGHR.Application.Service.reserva
                 }
 
                 entity.Borrado = true;
-                result.Data = await _Repository.UpdateEntityAsync(entity);
+                await _Repository.UpdateEntityAsync(entity);
+                result.Data = entity;
             }
             catch(Exception ex)
             {

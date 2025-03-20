@@ -1,4 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SGHR.Application.Interfaces.reserva;
+using SGHR.Application.Interfaces.sevicio;
+using SGHR.Application.Service.reserva;
+using SGHR.Application.Service.servicio;
 using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;
 using SGHR.Persistence.Interfaces.servicio;
@@ -16,7 +20,7 @@ namespace SGHR.IOC.DependencyInjection
         public static IServiceCollection AddAplicationServices(this IServiceCollection services)
         {
             #region Inyeccion de dependencia habitacion
-            services.AddScoped<IReservaRespository, CategoriaRepository>();
+            services.AddScoped<ICategoriaRepository, CategoriaRepository>();
             services.AddScoped<IEstadoHabitacionRepository, EstadoHabitacionRepository>();
             services.AddScoped<IHabitacionRepository, HabitacionRepository>();
             services.AddScoped<IPisoRepository, PisoRepository>();
@@ -25,10 +29,12 @@ namespace SGHR.IOC.DependencyInjection
 
             #region Inyeccion de dependencias de reserva
             services.AddScoped<IReservaRepository, ReservaRepository>();
+            services.AddTransient<IReservaService, Application.Service.reserva.ReservaServise>();
             #endregion
 
             #region Inyeccion de dependencias de servicio
             services.AddScoped<IServicioRepository, ServiciosRepository>();
+            services.AddTransient<IServiciosService, Application.Service.servicio.ServicioService>();
             #endregion
 
             #region Inyeccion de dependencias de usuario
