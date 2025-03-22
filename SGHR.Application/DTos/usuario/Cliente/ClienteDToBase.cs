@@ -5,10 +5,15 @@ namespace SGHR.Application.DTos.usuario.Cliente
 {
     public class ClienteDToBase: DToBases
     {
+        [Required]
+        public int IdCliente { get; set; }
+
+        [Required]
         [StringLength(15)]
         [RegularExpression("^[a-zA-Z]+$")]
         public string TipoDocumento { get; set; }
 
+        [Required]
         [StringLength(15)]
         [RegularExpression("^[0-9]+$")]
         public string Documento { get; set; }

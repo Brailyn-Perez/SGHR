@@ -23,9 +23,31 @@ namespace SGHR.Application.Service.usuario
             _logger = logger;
             _configuraticon = configuraticon;
         }
-        public Task<OperationResult> GeAll()
+        public async Task<OperationResult> GeAll()
         {
-            throw new NotImplementedException();
+            var result = new OperationResult();
+            try
+            {
+                var cliente = await _clienteRepository.GetAllAsync();
+                result.Success = true;
+                result.Data = cliente.Select(x => new ClienteDToBase
+                {
+                    IdCliente = x.IdCliente,
+                    NombreCompleto = x.NombreCompleto,
+                    Documento = x.Documento,
+                    TipoDocumento =x.TipoDocumento,
+                    Correo = x.Correo,
+                    Estado = x.Estado
+                    
+                });
+            }
+            catch (Exception ex) 
+            {
+                result.Success = false;
+                result.Message = _configuraticon["ErrorGetAllCliente"];
+                _logger.LogError(ex, result.Message);
+            }
+            return result;
         }
 
         public Task<OperationResult> GeById(int id)
