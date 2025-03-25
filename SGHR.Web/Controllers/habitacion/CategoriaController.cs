@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
 {
     public class CategoriaController : Controller
     {
+        private readonly ICategoriaService _service;
+
+        public CategoriaController(ICategoriaService service)
+        {
+            _service = service;
+        }
+
+
         // GET: CategoriaController
         public ActionResult Index()
         {

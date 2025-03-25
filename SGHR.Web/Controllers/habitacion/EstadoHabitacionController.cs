@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
 {
     public class EstadoHabitacionController : Controller
     {
+        private readonly IEstadoHabitacionService _service;
+
+        public EstadoHabitacionController(IEstadoHabitacionService service)
+        {
+            _service = service;
+        }
+
+
         // GET: EstadoHabitacionController
         public ActionResult Index()
         {

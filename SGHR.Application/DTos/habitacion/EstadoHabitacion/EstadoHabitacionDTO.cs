@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
-namespace SGHR.Application.DTos.habitacion.EstadoHabitacion
+﻿namespace SGHR.Application.DTos.habitacion.EstadoHabitacion
 {
     public class EstadoHabitacionDTO
     {

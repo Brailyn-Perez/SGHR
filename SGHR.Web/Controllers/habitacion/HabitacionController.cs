@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
 {
     public class HabitacionController : Controller
     {
+        private readonly IHabitacionService _service;
+
+        public HabitacionController(IHabitacionService service)
+        {
+            _service = service;
+        }
+
         // GET: HabitacionController
         public ActionResult Index()
         {

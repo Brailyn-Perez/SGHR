@@ -1,10 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
 {
     public class PisoController : Controller
     {
+        private readonly IPisoService _service;
+
+        public PisoController(IPisoService service)
+        {
+            _service = service;
+        }
+
         // GET: PisoController
         public ActionResult Index()
         {

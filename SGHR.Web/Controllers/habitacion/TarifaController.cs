@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
 {
     public class TarifaController : Controller
     {
+        private readonly ITarifaService _service;
+
+        public TarifaController(ITarifaService service)
+        {
+            _service = service;
+        }
+
+
         // GET: TarifaController
         public ActionResult Index()
         {
