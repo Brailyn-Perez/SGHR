@@ -14,19 +14,19 @@ namespace SGHR.Web.Controllers.habitacion
         }
 
         // GET: PisoController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
         // GET: PisoController/Details/5
-        public ActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
             return View();
         }
 
         // GET: PisoController/Create
-        public ActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
@@ -34,7 +34,7 @@ namespace SGHR.Web.Controllers.habitacion
         // POST: PisoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(IFormCollection collection)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace SGHR.Web.Controllers.habitacion
         }
 
         // GET: PisoController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             return View();
         }
@@ -55,7 +55,7 @@ namespace SGHR.Web.Controllers.habitacion
         // POST: PisoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -68,7 +68,7 @@ namespace SGHR.Web.Controllers.habitacion
         }
 
         // GET: PisoController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             return View();
         }
@@ -76,7 +76,7 @@ namespace SGHR.Web.Controllers.habitacion
         // POST: PisoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, IFormCollection collection)
         {
             try
             {

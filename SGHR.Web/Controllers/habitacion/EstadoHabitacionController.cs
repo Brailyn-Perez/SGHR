@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.DTos.habitacion.EstadoHabitacion;
 using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
@@ -13,32 +14,30 @@ namespace SGHR.Web.Controllers.habitacion
             _service = service;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var estados = await _service.GeAll();
+            return View(estados.Data);
+        }
 
-        // GET: EstadoHabitacionController
-        public ActionResult Index()
+        public async Task<IActionResult> Details(int id)
+        {
+            var estado = await _service.GeById(id);
+            return View(estado.Data);
+        }
+
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        // GET: EstadoHabitacionController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: EstadoHabitacionController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: EstadoHabitacionController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(SaveEstadoHabitacionDTO saveEstado)
         {
             try
             {
+                await _service.Save(saveEstado);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -47,19 +46,20 @@ namespace SGHR.Web.Controllers.habitacion
             }
         }
 
-        // GET: EstadoHabitacionController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var estado = await _service.GeById(id);
+            return View(estado.Data);
         }
 
-        // POST: EstadoHabitacionController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, UpdateEstadoHabitacionDTO update)
         {
             try
             {
+                update.IdEstadoHabitacion = id;
+                await _service.Update(update);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -68,19 +68,23 @@ namespace SGHR.Web.Controllers.habitacion
             }
         }
 
-        // GET: EstadoHabitacionController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var estado = await _service.GeById(id);
+            return View(estado.Data);
         }
 
-        // POST: EstadoHabitacionController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id,EstadoHabitacionDTO estadoDTO)
         {
             try
             {
+                var estado = new RemoveEstadoHabitacionDTO
+                {
+                    IdEstadoHabitacion = id
+                };
+                await _service.Remove(estado);
                 return RedirectToAction(nameof(Index));
             }
             catch

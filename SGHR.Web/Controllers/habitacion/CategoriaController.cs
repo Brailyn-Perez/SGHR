@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.Application.DTos.habitacion.Categoria;
 using SGHR.Application.Interfaces.habitacion;
 
 namespace SGHR.Web.Controllers.habitacion
@@ -13,32 +13,30 @@ namespace SGHR.Web.Controllers.habitacion
             _service = service;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var categories = await _service.GeAll();
+            return View(categories.Data);
+        }
 
-        // GET: CategoriaController
-        public ActionResult Index()
+        public async Task<IActionResult> Details(int id)
+        {
+            var category = await _service.GeById(id);
+            return View(category.Data);
+        }
+
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
-        // GET: CategoriaController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: CategoriaController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: CategoriaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(SaveCategoriaDTO categoriaDTO)
         {
             try
             {
+                await _service.Save(categoriaDTO);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -47,19 +45,26 @@ namespace SGHR.Web.Controllers.habitacion
             }
         }
 
-        // GET: CategoriaController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            var category = await _service.GeById(id);
+            UpdateCategoriaDTO updateCategoriaDTO = new UpdateCategoriaDTO
+            {
+                IdCategoria = category.Data.IdCategoria,
+                Descripcion = category.Data.Descripcion,
+                Estado = category.Data.Estado
+            };
+            return View(updateCategoriaDTO);
         }
 
-        // POST: CategoriaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, UpdateCategoriaDTO categoriaDTO)
         {
             try
             {
+                categoriaDTO.IdCategoria = id;
+                await _service.Update(categoriaDTO);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -68,19 +73,20 @@ namespace SGHR.Web.Controllers.habitacion
             }
         }
 
-        // GET: CategoriaController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            var category = await _service.GeById(id);
+            return View(category);
         }
 
-        // POST: CategoriaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Delete(int id, RemoveCategoriaDTO categoriaDTO)
         {
             try
             {
+                categoriaDTO.IdCategoria = id;
+                await _service.Remove(categoriaDTO);
                 return RedirectToAction(nameof(Index));
             }
             catch
