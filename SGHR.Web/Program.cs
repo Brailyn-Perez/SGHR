@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using SGHR.IOC.DependencyInjection;
+using SGHR.Persistence.Context;
+
 namespace SGHR.Web
 {
     public class Program
@@ -8,6 +12,12 @@ namespace SGHR.Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddDbContext<SGHRContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("BrailynConnection")));
+
+            // aqui es donde se inyectan todas las dependencias necesarias
+            builder.Services.AddAplicationServices();
 
             var app = builder.Build();
 

@@ -1,8 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-
-namespace SGHR.Application.DTos.habitacion.Categoria
+﻿namespace SGHR.Application.DTos.habitacion.Categoria
 {
     public class CategoriaDTO
     {
