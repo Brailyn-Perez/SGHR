@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SGHR.WEB.Consumiendo.Models.habitacion.Categoria.CategoriaViewModel>
+﻿@model IEnumerable<SGHR.WEB.Consumiendo.Models.habitacion.EstadoHabitacion.EstadoHabitacionViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.IdCategoria)
+                @Html.DisplayNameFor(model => model.IdEstadoHabitacion)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descripcion)
@@ -29,7 +29,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.IdCategoria)
+                    @Html.DisplayFor(modelItem => item.IdEstadoHabitacion)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Descripcion)
@@ -38,9 +38,9 @@
                     @Html.DisplayFor(modelItem => item.Estado)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.IdCategoria }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.IdCategoria }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.IdCategoria })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.IdEstadoHabitacion }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.IdEstadoHabitacion }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.IdEstadoHabitacion })
                 </td>
             </tr>
         }

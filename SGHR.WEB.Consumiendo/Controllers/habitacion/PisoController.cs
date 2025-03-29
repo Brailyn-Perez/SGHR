@@ -1,83 +1,194 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.habitacion.Piso;
 
-namespace SGHR.WEB.Consumiendo.Controllers.habitacion
+namespace SGHR.WEB.Consumiendo.Controllers
 {
     public class PisoController : Controller
     {
-        // GET: PisoController
-        public ActionResult Index()
+        private readonly HttpClient _httpClient;
+        private readonly string _apiUrl = "http://localhost:5017/api/Piso";
+
+        public PisoController(HttpClient httpClient)
         {
-            return View();
+            _httpClient = httpClient;
         }
 
-        // GET: PisoController/Details/5
-        public ActionResult Details(int id)
+        // GET: Index
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            List<PisoViewModel> pisos = new();
 
-        // GET: PisoController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: PisoController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.GetFromJsonAsync<List<PisoViewModel>>(_apiUrl);
+                if (response != null)
+                {
+                    pisos = response;
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(pisos);
         }
 
-        // GET: PisoController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PisoController/Edit/5
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Create(PisoViewModel piso)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(piso);
+            }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync(_apiUrl, piso);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al guardar el piso.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(piso);
         }
 
-        // GET: PisoController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Edit
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            PisoViewModel piso = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<PisoViewModel>(apiUrl);
+                if (response != null)
+                {
+                    piso = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (piso == null)
+            {
+                return NotFound();
+            }
+
+            return View(piso);
         }
 
-        // POST: PisoController/Delete/5
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, PisoViewModel piso)
         {
+            if (id != piso.IdPiso)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(piso);
+            }
+
+            string apiUrl = $"{_apiUrl}/{id}";
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PutAsJsonAsync(apiUrl, piso);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al actualizar el piso.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(piso);
+        }
+
+        // GET: Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            PisoViewModel piso = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<PisoViewModel>(apiUrl);
+                if (response != null)
+                {
+                    piso = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (piso == null)
+            {
+                return NotFound();
+            }
+
+            return View(piso);
+        }
+
+        // POST: Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al eliminar el piso.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

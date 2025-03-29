@@ -1,83 +1,194 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.habitacion.Tarifa;
 
-namespace SGHR.WEB.Consumiendo.Controllers.habitacion
+namespace SGHR.WEB.Consumiendo.Controllers
 {
     public class TarifaController : Controller
     {
-        // GET: TarifaController
-        public ActionResult Index()
+        private readonly HttpClient _httpClient;
+        private readonly string _apiUrl = "http://localhost:5017/api/Tarifa";
+
+        public TarifaController(HttpClient httpClient)
         {
-            return View();
+            _httpClient = httpClient;
         }
 
-        // GET: TarifaController/Details/5
-        public ActionResult Details(int id)
+        // GET: Index
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            List<TarifaViewModel> tarifas = new();
 
-        // GET: TarifaController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TarifaController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.GetFromJsonAsync<List<TarifaViewModel>>(_apiUrl);
+                if (response != null)
+                {
+                    tarifas = response;
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(tarifas);
         }
 
-        // GET: TarifaController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TarifaController/Edit/5
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Create(TarifaViewModel tarifa)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(tarifa);
+            }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync(_apiUrl, tarifa);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al guardar la tarifa.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(tarifa);
         }
 
-        // GET: TarifaController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Edit
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            TarifaViewModel tarifa = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<TarifaViewModel>(apiUrl);
+                if (response != null)
+                {
+                    tarifa = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (tarifa == null)
+            {
+                return NotFound();
+            }
+
+            return View(tarifa);
         }
 
-        // POST: TarifaController/Delete/5
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, TarifaViewModel tarifa)
         {
+            if (id != tarifa.IdTarifa)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(tarifa);
+            }
+
+            string apiUrl = $"{_apiUrl}/{id}";
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PutAsJsonAsync(apiUrl, tarifa);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al actualizar la tarifa.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(tarifa);
+        }
+
+        // GET: Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            TarifaViewModel tarifa = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<TarifaViewModel>(apiUrl);
+                if (response != null)
+                {
+                    tarifa = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (tarifa == null)
+            {
+                return NotFound();
+            }
+
+            return View(tarifa);
+        }
+
+        // POST: Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al eliminar la tarifa.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

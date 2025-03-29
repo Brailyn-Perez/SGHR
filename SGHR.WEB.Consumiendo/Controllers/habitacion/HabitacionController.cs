@@ -1,83 +1,193 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace SGHR.WEB.Consumiendo.Controllers.habitacion
+﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.habitacion.Habitacion;
+namespace SGHR.WEB.Consumiendo.Controllers
 {
     public class HabitacionController : Controller
     {
-        // GET: HabitacionController
-        public ActionResult Index()
+        private readonly HttpClient _httpClient;
+        private readonly string _apiUrl = "http://localhost:5017/api/Habitacion";
+
+        public HabitacionController(HttpClient httpClient)
         {
-            return View();
+            _httpClient = httpClient;
         }
 
-        // GET: HabitacionController/Details/5
-        public ActionResult Details(int id)
+        // GET: Index
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
+            List<HabitacionViewModel> habitaciones = new();
 
-        // GET: HabitacionController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: HabitacionController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.GetFromJsonAsync<List<HabitacionViewModel>>(_apiUrl);
+                if (response != null)
+                {
+                    habitaciones = response;
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(habitaciones);
         }
 
-        // GET: HabitacionController/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Create
+        public IActionResult Create()
         {
             return View();
         }
 
-        // POST: HabitacionController/Edit/5
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Create(HabitacionViewModel habitacion)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(habitacion);
+            }
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PostAsJsonAsync(_apiUrl, habitacion);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al guardar la habitación.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(habitacion);
         }
 
-        // GET: HabitacionController/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Edit
+        public async Task<IActionResult> Edit(int id)
         {
-            return View();
+            HabitacionViewModel habitacion = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<HabitacionViewModel>(apiUrl);
+                if (response != null)
+                {
+                    habitacion = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (habitacion == null)
+            {
+                return NotFound();
+            }
+
+            return View(habitacion);
         }
 
-        // POST: HabitacionController/Delete/5
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(int id, HabitacionViewModel habitacion)
         {
+            if (id != habitacion.IdHabitacion)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(habitacion);
+            }
+
+            string apiUrl = $"{_apiUrl}/{id}";
+
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _httpClient.PutAsJsonAsync(apiUrl, habitacion);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al actualizar la habitación.";
+                }
             }
-            catch
+            catch (HttpRequestException ex)
             {
-                return View();
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
+
+            return View(habitacion);
+        }
+
+        // GET: Delete
+        public async Task<IActionResult> Delete(int id)
+        {
+            HabitacionViewModel habitacion = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<HabitacionViewModel>(apiUrl);
+                if (response != null)
+                {
+                    habitacion = response;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (habitacion == null)
+            {
+                return NotFound();
+            }
+
+            return View(habitacion);
+        }
+
+        // POST: Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.DeleteAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ViewBag.Error = "Error al eliminar la habitación.";
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
