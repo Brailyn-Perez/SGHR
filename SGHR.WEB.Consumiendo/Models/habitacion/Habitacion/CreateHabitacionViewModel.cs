@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Application.DTos.habitacion.Habitacion
+namespace SGHR.WEB.Consumiendo.Models.habitacion.Habitacion
 {
-    public class SaveHabitacionDTO
+    public class CreateHabitacionViewModel
     {
         [Required]
         [StringLength(50)]

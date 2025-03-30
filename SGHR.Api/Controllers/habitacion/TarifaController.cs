@@ -37,7 +37,7 @@ namespace SGHR.Api.Controllers.habitacion
             var result = await _service.Save(tarifa);
             return Ok(result);
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(UpdateTarifaDTO tarifa)
         {
             if (!ModelState.IsValid)

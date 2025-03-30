@@ -119,6 +119,9 @@ namespace SGHR.Application.Service.habitacion
                     Estado = dto.Estado,
                     FechaCreacion = DateTime.UtcNow,
                     UsuarioCreacion = 0,
+                    IdCategoria = dto.IdCategoria,
+                    IdEstadoHabitacion = dto.IdEstadoHabitacion,
+                    IdPiso = dto.IdPiso
                 };
 
                 var isValid = await BaseValidator<Habitacion>.ValidateEntityAsync(habitacion);

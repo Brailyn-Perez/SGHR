@@ -50,13 +50,14 @@ namespace SGHR.Api.Controllers.habitacion
             var result = await _service.Update(estadoHabitacion);
             return Ok(result);
         }
-        [HttpDelete]
-        public async Task<IActionResult> Delete(RemoveEstadoHabitacionDTO estadoHabitacion)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var estadoHabitacion = new RemoveEstadoHabitacionDTO { IdEstadoHabitacion = id };
             var result = await _service.Remove(estadoHabitacion);
             return Ok(result);
         }

@@ -2,10 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SGHR.Application.DTos.habitacion.Habitacion
+namespace SGHR.WEB.Consumiendo.Models.habitacion.Habitacion
 {
-    public class SaveHabitacionDTO
+    public class UpdateHabitacionViewModel
     {
+        [Required]
+        [NotNull]
+        [Range(1, int.MaxValue)]
+        public int IdHabitacion { get; set; }
         [Required]
         [StringLength(50)]
         [MaxLength(50)]
@@ -21,8 +25,5 @@ namespace SGHR.Application.DTos.habitacion.Habitacion
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Precio { get; set; }
         public bool? Estado { get; set; } = true;
-        public int IdEstadoHabitacion { get; set; }
-        public int IdPiso { get; set; }
-        public int IdCategoria { get; set; }
     }
 }

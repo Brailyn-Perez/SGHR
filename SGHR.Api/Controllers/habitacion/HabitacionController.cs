@@ -41,7 +41,7 @@ namespace SGHR.Api.Controllers.habitacion
             return Ok(result);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(UpdateHabitacionDTO dto)
         {
             if (!ModelState.IsValid)
@@ -51,13 +51,14 @@ namespace SGHR.Api.Controllers.habitacion
             var result = await _service.Update(dto);
             return Ok(result);
         }
-        [HttpDelete]
-        public async Task<IActionResult> Delete(RemoveHabitacionDTO dto)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            RemoveHabitacionDTO dto = new RemoveHabitacionDTO { IdHabitacion = id };
             var result = await _service.Remove(dto);
             return Ok(result);
         }

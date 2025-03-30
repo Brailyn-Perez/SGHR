@@ -59,6 +59,9 @@ namespace SGHR.Persistence.Repositories.habitacion
                 {
                     return isValid;
                 }
+
+                entity.FechaCreacion = DateTime.UtcNow;
+                entity.UsuarioCreacion = 1;
             }
             catch (Exception ex)
             {
@@ -80,6 +83,8 @@ namespace SGHR.Persistence.Repositories.habitacion
                 {
                     return isValid;
                 }
+                entity.FechaActualizacion = DateTime.UtcNow;
+                entity.UsuarioActualizacion = 1;
             }
             catch (Exception ex)
             {
