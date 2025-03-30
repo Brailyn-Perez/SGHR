@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.Base;
+using SGHR.WEB.Consumiendo.Models.habitacion.EstadoHabitacion;
 using SGHR.WEB.Consumiendo.Models.habitacion.Tarifa;
 
 namespace SGHR.WEB.Consumiendo.Controllers
@@ -13,17 +15,16 @@ namespace SGHR.WEB.Consumiendo.Controllers
             _httpClient = httpClient;
         }
 
-        // GET: Index
         public async Task<IActionResult> Index()
         {
             List<TarifaViewModel> tarifas = new();
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<List<TarifaViewModel>>(_apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<TarifaViewModel>>>(_apiUrl);
                 if (response != null)
                 {
-                    tarifas = response;
+                    tarifas = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -34,16 +35,14 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(tarifas);
         }
 
-        // GET: Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TarifaViewModel tarifa)
+        public async Task<IActionResult> Create(CreateTarifaViewModel tarifa)
         {
             if (!ModelState.IsValid)
             {
@@ -71,18 +70,17 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(tarifa);
         }
 
-        // GET: Edit
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Details(int id)
         {
             TarifaViewModel tarifa = null;
             string apiUrl = $"{_apiUrl}/{id}";
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<TarifaViewModel>(apiUrl);
-                if (response != null)
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<TarifaViewModel>>(apiUrl);
+                if (response != null && response.Success)
                 {
-                    tarifa = response;
+                    tarifa = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -98,7 +96,32 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(tarifa);
         }
 
-        // POST: Edit
+        public async Task<IActionResult> Edit(int id)
+        {
+            TarifaViewModel tarifa = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<TarifaViewModel>>(apiUrl);
+                if (response != null)
+                {
+                    tarifa = response.Data;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (tarifa == null)
+            {
+                return NotFound();
+            }
+
+            return View(tarifa);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TarifaViewModel tarifa)
@@ -108,16 +131,43 @@ namespace SGHR.WEB.Consumiendo.Controllers
                 return BadRequest();
             }
 
+
             if (!ModelState.IsValid)
             {
                 return View(tarifa);
             }
 
+            TarifaViewModel GetTarifa = null;
             string apiUrl = $"{_apiUrl}/{id}";
 
             try
             {
-                var response = await _httpClient.PutAsJsonAsync(apiUrl, tarifa);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<TarifaViewModel>>(apiUrl);
+                if (response != null)
+                {
+                    GetTarifa = response.Data;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (tarifa == null)
+            {
+                return NotFound();
+            }
+
+            GetTarifa.FechaInicio = tarifa.FechaInicio;
+            GetTarifa.FechaFin = tarifa.FechaFin;
+            GetTarifa.PrecioPorNoche = tarifa.PrecioPorNoche;
+            GetTarifa.Descuento = tarifa.Descuento;
+            GetTarifa.Descripcion = tarifa.Descripcion;
+            GetTarifa.Estado = tarifa.Estado;
+
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync(apiUrl, GetTarifa);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -133,10 +183,12 @@ namespace SGHR.WEB.Consumiendo.Controllers
                 ViewBag.Error = "Error al conectar con la API: " + ex.Message;
             }
 
+
+
             return View(tarifa);
         }
 
-        // GET: Delete
+
         public async Task<IActionResult> Delete(int id)
         {
             TarifaViewModel tarifa = null;
@@ -144,10 +196,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<TarifaViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<TarifaViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    tarifa = response;
+                    tarifa = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -163,12 +215,11 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(tarifa);
         }
 
-        // POST: Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(TarifaViewModel tarifa)
         {
-            string apiUrl = $"{_apiUrl}/{id}";
+            string apiUrl = $"{_apiUrl}/{tarifa.IdTarifa}";
 
             try
             {
