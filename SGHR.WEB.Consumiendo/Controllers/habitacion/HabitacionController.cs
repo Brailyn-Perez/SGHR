@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.Base;
+using SGHR.WEB.Consumiendo.Models.habitacion.Categoria;
 using SGHR.WEB.Consumiendo.Models.habitacion.Habitacion;
 namespace SGHR.WEB.Consumiendo.Controllers
 {
@@ -12,17 +14,16 @@ namespace SGHR.WEB.Consumiendo.Controllers
             _httpClient = httpClient;
         }
 
-        // GET: Index
         public async Task<IActionResult> Index()
         {
             List<HabitacionViewModel> habitaciones = new();
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<List<HabitacionViewModel>>(_apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<HabitacionViewModel>>>(_apiUrl);
                 if (response != null)
                 {
-                    habitaciones = response;
+                    habitaciones = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -33,16 +34,40 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(habitaciones);
         }
 
-        // GET: Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Create
+        public async Task<IActionResult> Details(int id)
+        {
+            HabitacionViewModel habitacion = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<HabitacionViewModel>>(apiUrl);
+                if (response != null && response.Success)
+                {
+                    habitacion = response.Data;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (habitacion == null)
+            {
+                return NotFound();
+            }
+
+            return View(habitacion);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(HabitacionViewModel habitacion)
+        public async Task<IActionResult> Create(CreateHabitacionViewModel habitacion)
         {
             if (!ModelState.IsValid)
             {
@@ -70,7 +95,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(habitacion);
         }
 
-        // GET: Edit
         public async Task<IActionResult> Edit(int id)
         {
             HabitacionViewModel habitacion = null;
@@ -78,10 +102,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<HabitacionViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<HabitacionViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    habitacion = response;
+                    habitacion = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -94,13 +118,21 @@ namespace SGHR.WEB.Consumiendo.Controllers
                 return NotFound();
             }
 
-            return View(habitacion);
+            UpdateHabitacionViewModel updateHabitacion = new()
+            {
+                IdHabitacion = habitacion.IdHabitacion,
+                Numero = habitacion.Numero,
+                Detalle = habitacion.Detalle,
+                Precio = habitacion.Precio,
+                Estado = habitacion.Estado
+            };
+
+            return View(updateHabitacion);
         }
 
-        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, HabitacionViewModel habitacion)
+        public async Task<IActionResult> Edit(int id, UpdateHabitacionViewModel habitacion)
         {
             if (id != habitacion.IdHabitacion)
             {
@@ -135,7 +167,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(habitacion);
         }
 
-        // GET: Delete
         public async Task<IActionResult> Delete(int id)
         {
             HabitacionViewModel habitacion = null;
@@ -143,10 +174,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<HabitacionViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<HabitacionViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    habitacion = response;
+                    habitacion = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -162,12 +193,11 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(habitacion);
         }
 
-        // POST: Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(HabitacionViewModel habitacionViewModel)
         {
-            string apiUrl = $"{_apiUrl}/{id}";
+            string apiUrl = $"{_apiUrl}/{habitacionViewModel.IdHabitacion}";
 
             try
             {

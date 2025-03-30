@@ -21,5 +21,8 @@ namespace SGHR.Application.DTos.habitacion.Habitacion
         [Column(TypeName = "decimal(10, 2)")]
         public decimal Precio { get; set; }
         public bool? Estado { get; set; } = true;
+        public int IdEstadoHabitacion { get; set; }
+        public int IdPiso { get; set; }
+        public int IdCategoria { get; set; }
     }
 }
