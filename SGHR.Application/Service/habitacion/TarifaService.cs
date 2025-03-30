@@ -113,7 +113,16 @@ namespace SGHR.Application.Service.habitacion
             var result = new OperationResult();
             try
             {
-                var tarifa = new Tarifa { };
+                var tarifa = new Tarifa 
+                {
+                    Estado = dto.Estado,
+                    FechaInicio = dto.FechaInicio,
+                    FechaFin = dto.FechaFin,
+                    PrecioPorNoche = dto.PrecioPorNoche,
+                    Descuento = dto.Descuento,
+                    Descripcion = dto.Descripcion,
+                    IdHabitacion = dto.IdHabitacion
+                };
                 var isValid = await BaseValidator<Tarifa>.ValidateEntityAsync(tarifa);
                 if (!isValid.Success)
                 {
