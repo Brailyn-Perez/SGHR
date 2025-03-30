@@ -14,7 +14,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             _httpClient = httpClient;
         }
 
-        // GET: Index
         public async Task<IActionResult> Index()
         {
             List<EstadoHabitacionViewModel> estados = new();
@@ -35,16 +34,14 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(estados);
         }
 
-        // GET: Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CreateEstadoHabitacionViewModel estado)
+        public async Task<IActionResult> Create(EstadoHabitacionViewModel estado)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +50,13 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.PostAsJsonAsync(_apiUrl, estado);
+                CreateEstadoHabitacionViewModel Cestado = new()
+                {
+                    Descripcion = estado.Descripcion,
+                    Estado = estado.Estado
+                };
+
+                var response = await _httpClient.PostAsJsonAsync(_apiUrl, Cestado);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -72,7 +75,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(estado);
         }
 
-        // GET: Edit
         public async Task<IActionResult> Edit(int id)
         {
             EstadoHabitacionViewModel estado = null;
@@ -80,10 +82,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<EstadoHabitacionViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<EstadoHabitacionViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    estado = response;
+                    estado = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -95,14 +97,19 @@ namespace SGHR.WEB.Consumiendo.Controllers
             {
                 return NotFound();
             }
+            UpdateEstadoHabitacionViewModel updateEstado = new()
+            {
+                IdEstadoHabitacion = id,
+                Descripcion = estado.Descripcion,
+                Estado = estado.Estado
+            };
 
-            return View(estado);
+            return View(updateEstado);
         }
 
-        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EstadoHabitacionViewModel estado)
+        public async Task<IActionResult> Edit( UpdateEstadoHabitacionViewModel estado, int id)
         {
             if (id != estado.IdEstadoHabitacion)
             {
@@ -137,7 +144,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(estado);
         }
 
-        // GET: Delete
         public async Task<IActionResult> Delete(int id)
         {
             EstadoHabitacionViewModel estado = null;
@@ -145,10 +151,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<EstadoHabitacionViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<EstadoHabitacionViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    estado = response;
+                    estado = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -164,7 +170,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(estado);
         }
 
-        // POST: Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
