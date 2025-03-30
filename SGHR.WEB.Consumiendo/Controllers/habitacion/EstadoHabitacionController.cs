@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SGHR.WEB.Consumiendo.Models.Base;
 using SGHR.WEB.Consumiendo.Models.habitacion.EstadoHabitacion;
+using SGHR.WEB.Consumiendo.Models.habitacion.Habitacion;
 
 namespace SGHR.WEB.Consumiendo.Controllers
 {
@@ -34,14 +35,40 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(estados);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             return View();
         }
 
+        public async Task<IActionResult> Details(int id)
+        {
+            EstadoHabitacionViewModel estado = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<EstadoHabitacionViewModel>>(apiUrl);
+                if (response != null && response.Success)
+                {
+                    estado = response.Data;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (estado == null)
+            {
+                return NotFound();
+            }
+
+            return View(estado);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EstadoHabitacionViewModel estado)
+        public async Task<IActionResult> CreateEstado(CreateEstadoHabitacionViewModel estado)
         {
             if (!ModelState.IsValid)
             {
@@ -50,13 +77,8 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                CreateEstadoHabitacionViewModel Cestado = new()
-                {
-                    Descripcion = estado.Descripcion,
-                    Estado = estado.Estado
-                };
 
-                var response = await _httpClient.PostAsJsonAsync(_apiUrl, Cestado);
+                var response = await _httpClient.PostAsJsonAsync(_apiUrl, estado);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -109,19 +131,14 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit( UpdateEstadoHabitacionViewModel estado, int id)
+        public async Task<IActionResult> Edit(UpdateEstadoHabitacionViewModel estado)
         {
-            if (id != estado.IdEstadoHabitacion)
-            {
-                return BadRequest();
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(estado);
             }
 
-            string apiUrl = $"{_apiUrl}/{id}";
+            string apiUrl = $"{_apiUrl}/{estado.IdEstadoHabitacion}";
 
             try
             {
@@ -172,9 +189,9 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(EstadoHabitacionViewModel estado)
         {
-            string apiUrl = $"{_apiUrl}/{id}";
+            string apiUrl = $"{_apiUrl}/{estado.IdEstadoHabitacion}";
 
             try
             {

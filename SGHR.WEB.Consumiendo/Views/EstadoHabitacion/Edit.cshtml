@@ -8,6 +8,8 @@
 
 <h4>UpdateEstadoHabitacionViewModel</h4>
 <hr />
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
@@ -27,6 +29,8 @@
                 <input asp-for="Estado" class="form-control" />
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
+            <input type="hidden" name="Descripcion" value="@Model.Descripcion" />
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -39,5 +43,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
