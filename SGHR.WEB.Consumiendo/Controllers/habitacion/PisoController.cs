@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SGHR.WEB.Consumiendo.Models.Base;
+using SGHR.WEB.Consumiendo.Models.habitacion.Habitacion;
 using SGHR.WEB.Consumiendo.Models.habitacion.Piso;
 
 namespace SGHR.WEB.Consumiendo.Controllers
@@ -13,17 +15,16 @@ namespace SGHR.WEB.Consumiendo.Controllers
             _httpClient = httpClient;
         }
 
-        // GET: Index
         public async Task<IActionResult> Index()
         {
             List<PisoViewModel> pisos = new();
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<List<PisoViewModel>>(_apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<List<PisoViewModel>>>(_apiUrl);
                 if (response != null)
                 {
-                    pisos = response;
+                    pisos = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -34,16 +35,40 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(pisos);
         }
 
-        // GET: Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Create
+        public async Task<IActionResult> Details(int id)
+        {
+            PisoViewModel piso = null;
+            string apiUrl = $"{_apiUrl}/{id}";
+
+            try
+            {
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<PisoViewModel>>(apiUrl);
+                if (response != null && response.Success)
+                {
+                    piso = response.Data;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                ViewBag.Error = "Error al conectar con la API: " + ex.Message;
+            }
+
+            if (piso == null)
+            {
+                return NotFound();
+            }
+
+            return View(piso);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(PisoViewModel piso)
+        public async Task<IActionResult> Create(CreatePisoViewModel piso)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +96,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(piso);
         }
 
-        // GET: Edit
         public async Task<IActionResult> Edit(int id)
         {
             PisoViewModel piso = null;
@@ -79,10 +103,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<PisoViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<PisoViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    piso = response;
+                    piso = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -95,13 +119,18 @@ namespace SGHR.WEB.Consumiendo.Controllers
                 return NotFound();
             }
 
-            return View(piso);
+            UpdatePisoViewModel updatePiso = new()
+            {
+                IdPiso = piso.IdPiso,
+                Descripcion = piso.Descripcion,
+                Estado = piso.Estado
+            };
+            return View(updatePiso);
         }
 
-        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, PisoViewModel piso)
+        public async Task<IActionResult> Edit(int id, UpdatePisoViewModel piso)
         {
             if (id != piso.IdPiso)
             {
@@ -136,7 +165,6 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(piso);
         }
 
-        // GET: Delete
         public async Task<IActionResult> Delete(int id)
         {
             PisoViewModel piso = null;
@@ -144,10 +172,10 @@ namespace SGHR.WEB.Consumiendo.Controllers
 
             try
             {
-                var response = await _httpClient.GetFromJsonAsync<PisoViewModel>(apiUrl);
+                var response = await _httpClient.GetFromJsonAsync<ApiResponse<PisoViewModel>>(apiUrl);
                 if (response != null)
                 {
-                    piso = response;
+                    piso = response.Data;
                 }
             }
             catch (HttpRequestException ex)
@@ -163,12 +191,11 @@ namespace SGHR.WEB.Consumiendo.Controllers
             return View(piso);
         }
 
-        // POST: Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(DeletePisoViewModel deletePiso)
         {
-            string apiUrl = $"{_apiUrl}/{id}";
+            string apiUrl = $"{_apiUrl}/{deletePiso.IdPiso}";
 
             try
             {
