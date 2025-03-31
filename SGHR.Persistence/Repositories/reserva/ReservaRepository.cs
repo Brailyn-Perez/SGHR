@@ -131,17 +131,11 @@ namespace SGHR.Persistence.Repositories.reserva
         public override async Task<OperationResult> SaveEntityAsync(Reserva reserva)
         {
             OperationResult result = new();
-            // Crear instancias de validadores
             var validnullenty = new ReservaNotNullEntity();
             var validproperty = new ReservaNotNullProperties();
 
-            // Configurar la cadena correctamente
-            validnullenty.SetNext(validproperty);
-
-            // Iniciar la validación con el primer handler
-            result = validnullenty.Handler(reserva);
-
-            // Si la validación fue exitosa, recuperar la entidad validada
+            var validate = validnullenty.SetNext(validproperty);
+            result = validate.Handler(reserva);
             if (result.Success && result.Data != null)
             {
                 result.Message = "La entidad no puede ser nula.";
@@ -173,6 +167,7 @@ namespace SGHR.Persistence.Repositories.reserva
                 await _context.SaveChangesAsync();
                 result.Data = entryResult.Entity;
                 result.Message = "Entidad guardada exitosamente.";
+                result.Success = true;
             }
             catch (Exception ex)
             {

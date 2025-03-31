@@ -4,6 +4,7 @@ using SGHR.Domain.Entities.usuario;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using SGHR.Domain.Base;
+using System.Formats.Tar;
 
 namespace SGHR.Domain.Entities.reserva
 {
@@ -58,5 +59,6 @@ namespace SGHR.Domain.Entities.reserva
         {
             get; set;
         }
+
     }
 }

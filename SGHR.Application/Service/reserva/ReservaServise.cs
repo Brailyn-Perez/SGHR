@@ -47,7 +47,8 @@ namespace SGHR.Application.Service.reserva
         {
             OperationResult result = new();
             try{
-                result.Data = await _Repository.GetEntityByIdAsync(id);
+                var reserva = await _Repository.GetEntityByIdAsync(id);
+                result.Data = reserva;
                 result.Message = "Entidad obtenida Correctamente";
             }
             catch(Exception ex)
@@ -101,6 +102,7 @@ namespace SGHR.Application.Service.reserva
                     NumeroHuespedes = dto.NumeroHuespedes
                 });
                 result.Message = "reserva guardada";
+                result.Success = true;
             }
             catch(Exception ex)
             {

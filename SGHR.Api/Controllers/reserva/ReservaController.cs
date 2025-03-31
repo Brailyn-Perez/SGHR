@@ -13,17 +13,17 @@ namespace SGHR.Api.Controllers.reserva
     [ApiController]
     public class ReservaController : ControllerBase
     {
-        private readonly IReservaService _repository;
+        private readonly IReservaService _service;
 
         public ReservaController(IReservaService repository)
         {
-            _repository = repository;
+            _service = repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reserva>>> Get()
         {
-            var reservas = await _repository.GeAll();
+            var reservas = await _service.GeAll();
             return Ok(reservas);
         }
 
@@ -32,7 +32,7 @@ namespace SGHR.Api.Controllers.reserva
         {
             List<OperationResult> resultado = new();
             OperationResult result = new();
-            result = await _repository.GeById(id);
+            result = await _service.GeById(id);
             if (result.Data == null)
             {
                 return NotFound();
@@ -45,7 +45,7 @@ namespace SGHR.Api.Controllers.reserva
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] SaveReservaDTO reserva)
         {
-            var result = await _repository.Save(reserva);
+            var result = await _service.Save(reserva);
             if (!result.Success)
             {
                 return BadRequest(result.Message);
@@ -63,7 +63,7 @@ namespace SGHR.Api.Controllers.reserva
                 return BadRequest();
             }
 
-            var result = await _repository.Update(reserva);
+            var result = await _service.Update(reserva);
             if (!result.Success)
             {
                 return BadRequest(result.Message);
@@ -74,8 +74,8 @@ namespace SGHR.Api.Controllers.reserva
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var entity = await _repository.GeById(id);
-            var result = await _repository.Remove(entity.Data = new RemoveReservaDTO()
+            var entity = await _service.GeById(id);
+            var result = await _service.Remove(entity.Data = new RemoveReservaDTO()
             {
                 IdReserva = entity.Data.IdReserva
             });

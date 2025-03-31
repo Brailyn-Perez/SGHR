@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "SGHR.Api\\SGHR.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "SGHR.Web.Comsuming.Api.MAL\\SGHR.Web.Comsuming.Api.MAL.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -33,6 +33,5 @@ namespace SGHR.Domain.Entities.usuario
         public DateTime? FechaCreacion { get; set; } = DateTime.Now;
 
         public RolUsuario RolUsuario { get; set; }
-
     }
 }

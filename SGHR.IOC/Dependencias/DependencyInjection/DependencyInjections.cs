@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SGHR.Application.Interfaces.reserva;
 using SGHR.Application.Interfaces.sevicio;
+using SGHR.Application.Interfaces.usuario;
 using SGHR.Application.Service.reserva;
 using SGHR.Application.Service.servicio;
+using SGHR.Application.Service.usuario;
 using SGHR.Persistence.Interfaces.habitacion;
 using SGHR.Persistence.Interfaces.reserva;
 using SGHR.Persistence.Interfaces.servicio;
@@ -39,8 +41,11 @@ namespace SGHR.IOC.DependencyInjection
 
             #region Inyeccion de dependencias de usuario
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IClienteService, ClienteService>();
             services.AddScoped<IRolUsuarioRepository, RolUsuarioRepository>();
+            services.AddScoped<IRolUsuarioService, RolUsuarioService>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
             #endregion
             return services;
         }

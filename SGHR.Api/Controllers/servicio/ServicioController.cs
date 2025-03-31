@@ -43,7 +43,7 @@ namespace SGHR.Api.Controllers.servicio
             var result = await _repository.Save(servicio);
             if (!result.Success)
             {
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
             return CreatedAtAction(nameof(Get), servicio);
         }
