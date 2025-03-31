@@ -1,0 +1,36 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace SGHR.Web.Comsuming.Api.MAL.Models.reserva
+{
+    public class ReservaModel
+    {
+        public int IdReserva { get; set; }
+
+        public int IdCliente { get; set; }
+
+        public int IdHabitacion { get; set; }
+
+        public DateTime FechaEntrada { get; set; }
+
+        public DateTime FechaSalida { get; set; }
+
+        public DateTime FechaSalidaConfirmacion { get; set; }
+
+        public decimal PrecioInicial { get; set; }
+
+        public decimal Adelanto { get; set; }
+
+        public decimal PrecioRestante { get; set; }
+
+        public decimal TotalPagado { get; set; } = 0;
+
+        public decimal CostoPenalidad { get; set; } = 0;
+
+        public string Observacion { get; set; }
+
+        public int NumeroHuespedes { get; set; }
+
+        public bool Estado { get; set; }
+    }
+}
